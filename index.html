@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Запрошення на ювілей 🥂</title>
+  <meta name="description" content="Запрошую Вас на святкування мого ювілею! 17 листопада 2026 року">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== AUDIO ===== -->
+<audio id="bgMusic" loop preload="auto">
+  <source src="assets/music.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ===== ENVELOPE INTRO ===== -->
+<div class="envelope-screen" id="envScreen" onclick="openEnvelope()">
+
+  <!-- Decorative stars -->
+  <div class="env-star" style="top:15%;left:20%;animation-delay:0s;">
+    <svg viewBox="0 0 24 24" fill="#C8A87C" width="14" height="14"><path d="M12 2l2.09 6.26L20 9.27l-5 4.87L16.18 21 12 17.77 7.82 21 9 14.14l-5-4.87 5.91-1.01z"/></svg>
+  </div>
+  <div class="env-star" style="top:25%;left:78%;animation-delay:0.8s;">
+    <svg viewBox="0 0 24 24" fill="#D4B896" width="10" height="10"><path d="M12 2l2.09 6.26L20 9.27l-5 4.87L16.18 21 12 17.77 7.82 21 9 14.14l-5-4.87 5.91-1.01z"/></svg>
+  </div>
+  <div class="env-star" style="top:70%;left:85%;animation-delay:1.4s;">
+    <svg viewBox="0 0 24 24" fill="#B5A898" width="12" height="12"><path d="M12 2l2.09 6.26L20 9.27l-5 4.87L16.18 21 12 17.77 7.82 21 9 14.14l-5-4.87 5.91-1.01z"/></svg>
+  </div>
+  <div class="env-star" style="top:82%;left:12%;animation-delay:2s;">
+    <svg viewBox="0 0 24 24" fill="#C8BCB0" width="8" height="8"><path d="M12 2l2.09 6.26L20 9.27l-5 4.87L16.18 21 12 17.77 7.82 21 9 14.14l-5-4.87 5.91-1.01z"/></svg>
+  </div>
+
+  <!-- Sparkles -->
+  <div class="env-sparkle" style="top:10%;left:30%;animation-delay:0s;"></div>
+  <div class="env-sparkle" style="top:20%;left:70%;animation-delay:0.5s;"></div>
+  <div class="env-sparkle" style="top:50%;left:15%;animation-delay:1s;"></div>
+  <div class="env-sparkle" style="top:60%;left:80%;animation-delay:1.5s;"></div>
+  <div class="env-sparkle" style="top:80%;left:40%;animation-delay:2s;"></div>
+  <div class="env-sparkle" style="top:35%;left:55%;animation-delay:0.7s;"></div>
+  <div class="env-sparkle" style="top:75%;left:65%;animation-delay:1.2s;"></div>
+  <div class="env-sparkle" style="top:45%;left:90%;animation-delay:1.8s;"></div>
+
+  <!-- Envelope -->
+  <div class="envelope" id="envelope">
+    <div class="env-flap"></div>
+    <div class="env-seal"><img src="assets/seal.webp" alt="seal"></div>
+    <div class="env-body"></div>
+    <div class="env-card">
+      <span class="env-card-names">Запрошення <span style="font-size:0.78em;opacity:0.35;">🥂</span> на ювілей</span>
+      <span class="env-card-date">17 листопада 2026</span>
+    </div>
+  </div>
+
+  <div class="env-tap">
+    <span class="env-shimmer-text">натисніть, щоб відкрити запрошення</span>
+  </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="wrapper">
+
+  <!-- Background texture -->
+  <section class="section_bg">
+    <img src="assets/bg.webp" class="bg_img" alt="">
+  </section>
+
+  <!-- ===== HERO ===== -->
+  <section class="first__section" id="heroSection" data-focus="hero" data-text="dark">
+    <p class="first__title" style="letter-spacing:0.3em;">Запрошення</p>
+    <div class="first__name_wrap">
+      <span>на Ювілей</span>
+    </div>
+    <div><p class="_date_full">17 листопада 2026</p></div>
+  </section>
+
+  <!-- ===== GREETING / QUOTE ===== -->
+  <section class="flex_section" data-focus="greeting">
+    <h2 class="info__title">Шановні друзі!</h2>
+
+    <div class="orn"><span class="ln"></span><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="ln"></span></div>
+
+    <div class="info__content_wrap info__quote">
+      <p>Запрошую Вас на святкування мого ювілею! 🥂✨</p>
+      <p>Є особливі моменти, які хочеться розділити з найдорожчими людьми!</p>
+      <p>Буду щиро рада бачити Вас серед гостей на святкуванні мого ювілею, яке відбудеться у святковій атмосфері ресторану.</p>
+    </div>
+  </section>
+
+  <!-- ===== COUNTDOWN ===== -->
+  <section class="flex_section" data-focus="countdown">
+    <div class="countdown__section">
+      <h2 class="info__title" style="color:var(--text);">До свята</h2>
+      <p class="countdown__date" style="color:var(--text-soft);">17 листопада 2026</p>
+      <p class="countdown__subtitle" style="color:var(--text-soft);">Зворотній відлік</p>
+
+      <div class="orn"><span class="ln"></span><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="ln"></span></div>
+
+      <!-- Hourglass SVG -->
+      <div class="hg"><svg class="hg__svg" viewBox="0 0 100 180" width="180" height="234"><defs><linearGradient id="frameGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="var(--hg-f1,#9A8E80)"/><stop offset="30%" stop-color="var(--hg-f2,#C8BCB0)"/><stop offset="60%" stop-color="var(--hg-f3,#B5A898)"/><stop offset="100%" stop-color="var(--hg-f4,#D8CEC4)"/></linearGradient><linearGradient id="frameGrad2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--hg-f2,#C8BCB0)"/><stop offset="100%" stop-color="var(--hg-f1,#9A8E80)"/></linearGradient><linearGradient id="sandGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--hg-s1,#C8BCB0)" stop-opacity=".8"/><stop offset="40%" stop-color="var(--hg-s2,#B5A898)" stop-opacity=".6"/><stop offset="100%" stop-color="var(--hg-s3,#A09080)" stop-opacity=".4"/></linearGradient><linearGradient id="sandGradBot" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--hg-s2,#B5A898)" stop-opacity=".5"/><stop offset="100%" stop-color="var(--hg-s1,#C8BCB0)" stop-opacity=".8"/></linearGradient><linearGradient id="glassGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--cream)" stop-opacity=".6"/><stop offset="50%" stop-color="var(--pink-pale)" stop-opacity=".3"/><stop offset="100%" stop-color="var(--cream)" stop-opacity=".15"/></linearGradient><radialGradient id="glowCenter" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="var(--hg-f2,#C8BCB0)" stop-opacity=".25"/><stop offset="100%" stop-color="var(--hg-f2,#C8BCB0)" stop-opacity="0"/></radialGradient><filter id="softGlow"><feGaussianBlur stdDeviation="2" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter><filter id="innerShadow"><feGaussianBlur stdDeviation="3" in="SourceAlpha" result="blur"/><feOffset dx="0" dy="1"/><feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/><feFlood flood-color="var(--hg-f1,#9A8E80)" flood-opacity=".15"/><feComposite operator="in" in2="blur"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><rect x="16" y="4" width="68" height="3" rx="1.5" fill="url(#frameGrad)" opacity=".9"/><rect x="12" y="0" width="76" height="3" rx="1.5" fill="url(#frameGrad2)" opacity=".6"/><rect x="20" y="7" width="60" height="2" rx="1" fill="url(#frameGrad)" opacity=".5"/><rect x="16" y="173" width="68" height="3" rx="1.5" fill="url(#frameGrad)" opacity=".9"/><rect x="12" y="177" width="76" height="3" rx="1.5" fill="url(#frameGrad2)" opacity=".6"/><rect x="20" y="171" width="60" height="2" rx="1" fill="url(#frameGrad)" opacity=".5"/><line x1="22" y1="10" x2="22" y2="170" stroke="url(#frameGrad)" stroke-width="1.8" opacity=".6"/><line x1="78" y1="10" x2="78" y2="170" stroke="url(#frameGrad)" stroke-width="1.8" opacity=".6"/><circle cx="22" cy="50" r="1.5" fill="url(#frameGrad)" opacity=".3"/><circle cx="78" cy="50" r="1.5" fill="url(#frameGrad)" opacity=".3"/><circle cx="22" cy="130" r="1.5" fill="url(#frameGrad)" opacity=".3"/><circle cx="78" cy="130" r="1.5" fill="url(#frameGrad)" opacity=".3"/><path d="M26 12 Q26 76 50 90 Q74 76 74 12 Z" fill="url(#glassGrad)" filter="url(#innerShadow)"/><path d="M26 12 Q26 76 50 90 Q74 76 74 12" fill="none" stroke="url(#frameGrad)" stroke-width="1.2" opacity=".6"/><path d="M26 168 Q26 104 50 90 Q74 104 74 168 Z" fill="url(#glassGrad)" filter="url(#innerShadow)"/><path d="M26 168 Q26 104 50 90 Q74 104 74 168" fill="none" stroke="url(#frameGrad)" stroke-width="1.2" opacity=".6"/><circle cx="50" cy="90" r="12" fill="url(#glowCenter)"><animate attributeName="r" values="8;14;8" dur="4s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;1;.6" dur="4s" repeatCount="indefinite"/></circle><path id="sandTop" d="M30 16 Q30 62 50 78 Q70 62 70 16 Z" fill="url(#sandGrad)" filter="url(#softGlow)"><animate attributeName="d" values="M30 16 Q30 62 50 78 Q70 62 70 16 Z;M30 16 Q30 64 50 80 Q70 64 70 16 Z;M30 16 Q30 62 50 78 Q70 62 70 16 Z" dur="6s" repeatCount="indefinite"/></path><path id="sandBot" d="M38 168 Q38 152 50 146 Q62 152 62 168 Z" fill="url(#sandGradBot)" filter="url(#softGlow)"><animate attributeName="d" values="M38 168 Q38 152 50 146 Q62 152 62 168 Z;M36 168 Q36 150 50 144 Q64 150 64 168 Z;M38 168 Q38 152 50 146 Q62 152 62 168 Z" dur="6s" repeatCount="indefinite"/></path><g class="hg__flow"><path d="M50 80 Q48 100 50 118 Q52 136 50 150" fill="none" stroke="var(--hg-s2,#B5A898)" stroke-width="2.5" opacity=".3" stroke-linecap="round"><animate attributeName="d" values="M50 80 Q47 100 50 118 Q53 136 50 150;M50 80 Q53 98 50 116 Q47 134 50 150;M50 80 Q47 100 50 118 Q53 136 50 150" dur="2.2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".2;.45;.2" dur="1.8s" repeatCount="indefinite"/><animate attributeName="stroke-width" values="2;3;2" dur="1.8s" repeatCount="indefinite"/></path><path d="M50 82 Q47 106 48 128 Q46 142 48 150" fill="none" stroke="var(--hg-s1,#C8BCB0)" stroke-width="1" opacity=".15" stroke-linecap="round"><animate attributeName="d" values="M50 82 Q47 106 48 128 Q46 142 48 150;M50 82 Q48 104 49 126 Q47 140 49 150;M50 82 Q47 106 48 128 Q46 142 48 150" dur="2.6s" repeatCount="indefinite" begin=".3s"/><animate attributeName="opacity" values=".1;.3;.1" dur="2.4s" repeatCount="indefinite"/></path><circle r="1.6" fill="var(--hg-s2,#B5A898)"><animate attributeName="cx" values="50;46;42;45" dur="1.7s" repeatCount="indefinite"/><animate attributeName="cy" values="82;112;140;152" dur="1.7s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;.5;.25;0" dur="1.7s" repeatCount="indefinite"/></circle><circle r="1.2" fill="var(--hg-s1,#C8BCB0)"><animate attributeName="cx" values="50;54;58;55" dur="1.5s" repeatCount="indefinite" begin=".4s"/><animate attributeName="cy" values="83;110;138;151" dur="1.5s" repeatCount="indefinite" begin=".4s"/><animate attributeName="opacity" values=".6;.4;.15;0" dur="1.5s" repeatCount="indefinite" begin=".4s"/></circle><circle r=".9" fill="var(--hg-f4,#D8CEC4)"><animate attributeName="cx" values="50;48;51;50" dur="1.2s" repeatCount="indefinite" begin=".8s"/><animate attributeName="cy" values="84;120;145;152" dur="1.2s" repeatCount="indefinite" begin=".8s"/><animate attributeName="opacity" values=".5;.35;.1;0" dur="1.2s" repeatCount="indefinite" begin=".8s"/></circle></g><circle cx="50" cy="90" r="4" fill="var(--hg-f2,#C8BCB0)" opacity=".08"><animate attributeName="r" values="3;8;3" dur="3.5s" repeatCount="indefinite"/><animate attributeName="opacity" values=".05;.18;.05" dur="3.5s" repeatCount="indefinite"/></circle></svg></div>
+
+      <!-- Countdown numbers -->
+      <div class="cd" id="cdTimer">
+        <div class="cd__item"><span class="cd__num" id="cdD">--</span><span class="cd__lbl" id="cdDl">днів</span></div>
+        <div class="cd__sep">:</div>
+        <div class="cd__item"><span class="cd__num" id="cdH">--</span><span class="cd__lbl" id="cdHl">годин</span></div>
+        <div class="cd__sep">:</div>
+        <div class="cd__item"><span class="cd__num" id="cdM">--</span><span class="cd__lbl" id="cdMl">хвилин</span></div>
+        <div class="cd__sep">:</div>
+        <div class="cd__item"><span class="cd__num" id="cdS">--</span><span class="cd__lbl" id="cdSl">секунд</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SAVE THE DATE / CALENDAR ===== -->
+  <section class="flex_section" data-focus="saveTheDate">
+    <h2 class="info__title" style="color:var(--text);">Save the Date</h2>
+    <div class="cal-flip" style="position:relative;z-index:1;">
+      <div class="cal-header">Листопад 2026</div>
+      <div class="cal-grid">
+        <div class="cal-dh">Пн</div><div class="cal-dh">Вт</div><div class="cal-dh">Ср</div><div class="cal-dh">Чт</div><div class="cal-dh">Пт</div><div class="cal-dh">Сб</div><div class="cal-dh">Нд</div>
+        <div class="cal-d empty"></div>
+        <div class="cal-d empty"></div>
+        <div class="cal-d empty"></div>
+        <div class="cal-d empty"></div>
+        <div class="cal-d empty"></div>
+        <div class="cal-d empty"></div>
+        <div class="cal-d">1</div>
+        <div class="cal-d">2</div>
+        <div class="cal-d">3</div>
+        <div class="cal-d">4</div>
+        <div class="cal-d">5</div>
+        <div class="cal-d">6</div>
+        <div class="cal-d">7</div>
+        <div class="cal-d">8</div>
+        <div class="cal-d">9</div>
+        <div class="cal-d">10</div>
+        <div class="cal-d">11</div>
+        <div class="cal-d">12</div>
+        <div class="cal-d">13</div>
+        <div class="cal-d">14</div>
+        <div class="cal-d">15</div>
+        <div class="cal-d">16</div>
+        <div class="cal-d active">17</div>
+        <div class="cal-d">18</div>
+        <div class="cal-d">19</div>
+        <div class="cal-d">20</div>
+        <div class="cal-d">21</div>
+        <div class="cal-d">22</div>
+        <div class="cal-d">23</div>
+        <div class="cal-d">24</div>
+        <div class="cal-d">25</div>
+        <div class="cal-d">26</div>
+        <div class="cal-d">27</div>
+        <div class="cal-d">28</div>
+        <div class="cal-d">29</div>
+        <div class="cal-d">30</div>
+      </div>
+    </div>
+    <div style="margin-top:28px;text-align:center;">
+      <svg class="save-heart" viewBox="0 0 24 24" fill="var(--save-heart, var(--rose))" width="28" height="28" style="display:block;margin:0 auto 10px;"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg>
+      <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(16px,2.5vw,20px);color:var(--text-soft);font-style:italic;font-weight:500;letter-spacing:0.08em;">Чекаю на Вас!</p>
+    </div>
+  </section>
+
+  <!-- ===== LOCATION ===== -->
+  <section class="flex_section" data-focus="location">
+    <h2 class="info__title">Локація</h2>
+
+    <!-- Location pin SVG -->
+    <div style="margin-bottom:28px;"><svg class="loc-pin" viewBox="0 0 48 64" width="58" height="77" style="display:block;margin:0 auto;overflow:visible;"><defs><linearGradient id="locPinGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--rose)"/><stop offset="100%" stop-color="var(--rose-deep)"/></linearGradient><radialGradient id="locPinGlow" cx="50%" cy="30%" r="60%"><stop offset="0%" stop-color="var(--pink-light)" stop-opacity=".5"/><stop offset="100%" stop-color="var(--rose)" stop-opacity="0"/></radialGradient><filter id="locPinShadow"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="var(--pin-1,#B5A898)" flood-opacity=".2"/></filter></defs><ellipse cx="24" cy="60" rx="10" ry="3" fill="var(--pin-3,#6B6058)" opacity=".15"><animate attributeName="rx" values="10;12;10" dur="2s" repeatCount="indefinite"/><animate attributeName="opacity" values=".15;.08;.15" dur="2s" repeatCount="indefinite"/></ellipse><g filter="url(#locPinShadow)"><path d="M24 2C14 2 6 10 6 20c0 14 18 34 18 34s18-20 18-34C42 10 34 2 24 2z" fill="url(#locPinGrad)"/><path d="M24 2C14 2 6 10 6 20c0 14 18 34 18 34s18-20 18-34C42 10 34 2 24 2z" fill="url(#locPinGlow)"/></g><circle cx="24" cy="20" r="8" fill="var(--cream)" opacity=".9"/><path d="M24 26.5l-0.7-0.6C20 23 18 21 18 18.8c0-1.5 1.2-2.8 2.8-2.8c0.9 0 1.7.4 2.2 1l1 1.1 1-1.1c.5-.6 1.3-1 2.2-1c1.6 0 2.8 1.3 2.8 2.8c0 2.2-2 4.2-5.3 7.1L24 26.5z" fill="url(#locPinGrad)" opacity=".7"/><animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="2s" repeatCount="indefinite"/></svg></div>
+
+    <div class="location__row" style="display:flex;gap:24px;justify-content:center;align-items:stretch;flex-wrap:wrap;width:100%;max-width:700px;">
+      <div class="location__wrap" style="flex:1;min-width:200px;display:flex;flex-direction:column;justify-content:space-between;">
+        <div class="location__item">
+          <p>Святкування</p>
+          <p>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,2vw,18px);font-weight:500;color:var(--text-soft);">Ресторан «Австрійський двір»</span>
+            <br>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,2vw,18px);font-weight:500;color:var(--text-soft);">селище Куликів, вул. Шевченка, 69а</span>
+          </p>
+        </div>
+        <a href="https://maps.app.goo.gl/avstriiskyi-dvir" target="_blank" class="location__link" style="margin-top:auto;border-color:var(--text);color:var(--text);">Відкрити карту <span style="margin-left:4px;display:inline-block;">&rarr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIMING / PROGRAM ===== -->
+  <section class="flex_section" data-focus="timing">
+    <h2 class="info__title" style="color:var(--text);">Програма дня</h2>
+
+    <div class="timing__list" style="color:var(--text-soft);">
+      <div class="timing__item">
+        <div class="tl-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.5"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54z"/></svg>
+        </div>
+        <div class="tl-info-wrap">
+          <p class="__time" style="color:var(--text);">16:00</p>
+          <p class="__text" style="color:var(--text-soft);">Зустріч гостей</p>
+        </div>
+      </div>
+      <div class="timing__item">
+        <div class="tl-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.5"><path d="M8 22h8M12 15v7"/><path d="M12 15a5 5 0 005-5V2H7v8a5 5 0 005 5z"/><path d="M7 7h10"/></svg>
+        </div>
+        <div class="tl-info-wrap">
+          <p class="__time" style="color:var(--text);">16:30</p>
+          <p class="__text" style="color:var(--text-soft);">Святковий банкет</p>
+        </div>
+      </div>
+      <div class="timing__item">
+        <div class="tl-img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </div>
+        <div class="tl-info-wrap">
+          <p class="__time" style="color:var(--text);">18:00</p>
+          <p class="__text" style="color:var(--text-soft);">Розважальна програма</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TIPS ===== -->
+  <section class="flex_section" data-focus="tips">
+    <h2 class="info__title" style="color:var(--text);">Підказки</h2>
+    <div class="tips__text_wrap"><p style="color:var(--text-soft);">Маленькі побажання для гостей</p></div>
+
+    <div class="tips__list" style="color:var(--text-soft);">
+      <div class="tips__item">
+        <div class="__item_img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg>
+        </div>
+        <div class="__item__content_wrap">
+          <p class="_title" style="color:var(--text);">Гарний настрій — обов'язковий!</p>
+          <p style="color:var(--text-soft);">Принесіть найяскравішу усмішку та танцювальний настрій!</p>
+        </div>
+      </div>
+      <div class="tips__item">
+        <div class="__item_img">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.5"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <div class="__item__content_wrap">
+          <p class="_title" style="color:var(--text);">Фото на пам'ять</p>
+          <p style="color:var(--text-soft);">Не забудьте зарядити телефони — буде багато моментів, які варто зберегти!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RSVP FORM ===== -->
+  <section class="flex_section" data-focus="rsvp">
+    <h2 class="info__title" id="rsvpHeader" style="color:var(--text);">Підтвердіть присутність</h2>
+
+    <div class="orn"><span class="ln"></span><svg viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="ln"></span></div>
+
+    <div id="rsvpW">
+      <form class="rsvp-form" id="rsvpForm" onsubmit="return sendForm(event)" novalidate>
+        <div id="rsvpBody">
+          <!-- Name -->
+          <div class="fg">
+            <label>Повне ім'я *</label>
+            <input type="text" id="gName" placeholder="Ваше прізвище та ім'я" maxlength="100">
+          </div>
+
+          <!-- Attendance -->
+          <div class="fg">
+            <label>Чи будете присутні? *</label>
+            <div class="rsvp-rad">
+              <label class="rad">
+                <input type="radio" name="att" value="yes" style="display:none;">
+                <span>Так, із задоволенням!</span>
+              </label>
+              <label class="rad">
+                <input type="radio" name="att" value="no" style="display:none;">
+                <span>На жаль, не зможу</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Extra fields (shown when "yes") -->
+          <div id="rsvpExtra" class="rsvp-extra">
+            <div class="fg">
+              <label>Кількість гостей</label>
+              <select id="gCount">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+            <div class="fg">
+              <label>Побажання</label>
+              <textarea id="gWishes" placeholder="Ваші побажання..." rows="3"></textarea>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn-p btn-f">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            <span>Надіслати відповідь</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Thank you message -->
+    <div id="rsvpThx" class="rsvp-thx" style="display:none;color:var(--text);">
+      <h2 class="info__title" id="thxH" style="color:var(--text);"></h2>
+      <p id="thx1" style="color:var(--text-soft);"></p>
+      <p id="thx2" style="color:var(--text-soft);"></p>
+    </div>
+  </section>
+
+  <!-- ===== CLOSING ===== -->
+  <section class="last__section" data-focus="signature">
+    <div class="title_wrap">
+      <h2 class="last__title">Приходьте розділити зі мною радість</h2>
+      <h2 class="last__title">цього особливого дня! ❤️</h2>
+    </div>
+  </section>
+
+</div><!-- .wrapper -->
+
+<!-- ===== MUSIC BUTTON ===== -->
+<div class="music-btn" id="musicBtn" onclick="toggleMusic()">
+  <svg id="musicOn" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2" style="display:none;"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+  <svg id="musicOff" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/><line x1="3" y1="3" x2="21" y2="21" stroke-width="2.5" opacity="0.7"/></svg>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="f-date">17 листопада 2026</div>
+  <div class="f-copy" style="margin-top:12px;">З нетерпінням чекаю зустрічі! 🥂</div>
+</footer>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>
