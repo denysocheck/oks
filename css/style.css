@@ -8,17 +8,17 @@
   --color-champagne: #f5efe6;
   --color-envelope: #e5d8c7;
   --color-gold: #c8a87c;
-  --color-gold-dark: #9e7d52;
-  --color-gold-light: #d4b78f;
-  --color-rose-deep: #a67c5b;
+  --color-gold-dark: #8c6027;
+  --color-gold-light: #dfc8a5;
+  --color-rose-deep: #7e4d30;
   --font-script: 'Great Vibes', cursive;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-display: 'Playfair Display', serif;
   --font-sans: 'Montserrat', Arial, sans-serif;
-  --color-text: #2a2521;
-  --color-text-soft: #554d45;
-  --color-text-muted: #8b8075;
-  --color-card-border: rgba(200, 168, 124, 0.4);
+  --color-text: #1a1613;
+  --color-text-soft: #383029;
+  --color-text-muted: #6e6356;
+  --color-card-border: rgba(185, 145, 95, 0.55);
 }
 
 * {
@@ -45,7 +45,7 @@ body {
   background-color: var(--color-warm-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
 }
@@ -472,15 +472,15 @@ body.world-active .track-rail {
 /* Editorial Glass Card */
 .station-copy-card {
   position: relative;
-  width: min(500px, 100%);
-  padding: clamp(24px, 4.5vw, 36px);
-  border-radius: 24px;
+  width: min(520px, 100%);
+  padding: clamp(26px, 4.8vw, 40px);
+  border-radius: 26px;
   background: #fdfaf6;
-  background: rgba(253, 250, 246, 0.94);
+  background: rgba(254, 252, 248, 0.97);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1.5px solid var(--color-card-border);
-  box-shadow: 0 30px 70px rgba(70, 55, 40, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  border: 2px solid var(--color-card-border);
+  box-shadow: 0 32px 75px rgba(50, 35, 20, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   pointer-events: auto;
   transition: transform 0.4s ease, box-shadow 0.35s ease, opacity 0.5s ease;
   opacity: 0;
@@ -493,44 +493,46 @@ body.world-active .track-rail {
 }
 
 .station-copy-card:hover {
-  box-shadow: 0 36px 85px rgba(70, 55, 40, 0.22);
+  box-shadow: 0 38px 88px rgba(50, 35, 20, 0.26);
 }
 
 .station-eyebrow {
   display: block;
   font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 14px;
-  letter-spacing: 0.14em;
+  font-size: 15px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--color-gold-dark);
   margin-bottom: 12px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .station-heading {
   font-family: var(--font-script);
-  font-size: clamp(32px, 6vw, 52px);
-  line-height: 1.12;
+  font-size: clamp(36px, 7vw, 56px);
+  line-height: 1.15;
   color: var(--color-text);
   margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .station-quote {
   font-family: var(--font-serif);
-  font-size: clamp(17px, 2.5vw, 21px);
+  font-size: clamp(19px, 2.8vw, 24px);
   font-style: italic;
+  font-weight: 600;
   color: var(--color-rose-deep);
   line-height: 1.6;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .station-body {
-  font-family: var(--font-serif);
-  font-size: clamp(15px, 2.3vw, 18px);
-  font-style: italic;
+  font-family: var(--font-sans);
+  font-size: clamp(16px, 2.5vw, 19px);
+  font-weight: 500;
+  font-style: normal;
   color: var(--color-text-soft);
-  line-height: 1.7;
+  line-height: 1.75;
 }
 
 /* Calendar Card Features */
@@ -591,49 +593,52 @@ body.world-active .track-rail {
 }
 
 .cd-box {
-  background: rgba(200, 168, 124, 0.12);
+  background: rgba(200, 168, 124, 0.16);
   border-radius: 12px;
-  padding: 8px 12px;
-  min-width: 62px;
+  padding: 10px 14px;
+  min-width: 66px;
   text-align: center;
+  border: 1px solid rgba(200, 168, 124, 0.3);
 }
 
 .cd-val {
   font-family: var(--font-display);
-  font-size: 22px;
+  font-size: 24px;
   color: var(--color-text);
-  font-weight: 500;
+  font-weight: 700;
   line-height: 1;
 }
 
 .cd-lbl {
-  font-size: 10px;
+  font-size: 11px;
   text-transform: uppercase;
   color: var(--color-text-muted);
-  margin-top: 3px;
+  font-weight: 600;
+  margin-top: 4px;
 }
 
 /* Restaurant Address & Menu */
 .rest-highlight {
-  background: rgba(200, 168, 124, 0.14);
-  border-radius: 14px;
-  padding: 14px 16px;
-  margin: 16px 0;
+  background: rgba(200, 168, 124, 0.2);
+  border: 1.5px solid rgba(185, 145, 95, 0.4);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin: 18px 0;
 }
 
 .rest-title {
   font-family: var(--font-serif);
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: 700;
   color: var(--color-gold-dark);
 }
 
 .rest-sub {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 15px;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
   color: var(--color-text-soft);
-  margin-top: 2px;
+  margin-top: 4px;
 }
 
 .menu-list-embed {
@@ -698,25 +703,141 @@ body.world-active .track-rail {
 .card-action-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 22px;
+  gap: 10px;
+  padding: 13px 26px;
   border-radius: 100px;
-  background: var(--color-gold);
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
   color: #fff;
-  font-family: var(--font-serif);
-  font-style: italic;
+  font-family: var(--font-sans);
+  font-weight: 600;
   font-size: 16px;
   text-decoration: none;
   cursor: pointer;
   border: none;
   transition: all 0.3s;
-  box-shadow: 0 4px 14px rgba(160, 125, 80, 0.25);
-  margin-top: 14px;
+  box-shadow: 0 6px 18px rgba(140, 96, 39, 0.35);
+  margin-top: 16px;
 }
 
 .card-action-btn:hover {
   transform: translateY(-2px);
-  background: var(--color-gold-dark);
+  box-shadow: 0 10px 24px rgba(140, 96, 39, 0.45);
+}
+
+/* ==========================================================================
+   RSVP INVITATION ACCEPTANCE BOX (FINAL CARD)
+   ========================================================================== */
+.rsvp-card-box {
+  margin-top: 24px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 20px;
+  border: 1.5px solid rgba(185, 145, 95, 0.45);
+  box-shadow: 0 10px 28px rgba(70, 50, 30, 0.08);
+  text-align: left;
+}
+
+.rsvp-label {
+  display: block;
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 19px;
+  color: var(--color-text);
+  margin-bottom: 10px;
+}
+
+.rsvp-input-row {
+  margin-bottom: 14px;
+}
+
+.rsvp-input {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(185, 145, 95, 0.5);
+  background: #faf7f2;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--color-text);
+  outline: none;
+  transition: all 0.25s ease;
+}
+
+.rsvp-input:focus {
+  background: #ffffff;
+  border-color: var(--color-gold-dark);
+  box-shadow: 0 0 0 4px rgba(200, 168, 124, 0.3);
+}
+
+.rsvp-input::placeholder {
+  color: #9c9083;
+  font-weight: 400;
+}
+
+.rsvp-submit-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 24px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, #c8a87c, #8c6027);
+  color: #ffffff;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 20px rgba(140, 96, 39, 0.35);
+}
+
+.rsvp-submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(140, 96, 39, 0.45);
+  background: linear-gradient(135deg, #dfc8a5, #7a4f1a);
+}
+
+.rsvp-submit-btn:active {
+  transform: translateY(0);
+}
+
+.rsvp-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.rsvp-success-msg {
+  text-align: center;
+  padding: 16px 10px;
+  background: #faf7f2;
+  border-radius: 16px;
+  border: 1.5px solid rgba(185, 145, 95, 0.4);
+}
+
+.rsvp-success-icon {
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.rsvp-success-title {
+  font-family: var(--font-script);
+  font-size: 38px;
+  font-weight: 600;
+  color: var(--color-gold-dark);
+  line-height: 1.2;
+}
+
+.rsvp-success-desc {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 600;
+  color: var(--color-rose-deep);
+  margin-top: 6px;
 }
 
 /* Floating Music Control */

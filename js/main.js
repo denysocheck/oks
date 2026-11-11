@@ -162,4 +162,83 @@
   window.addEventListener("resize", revealVisibleCards, { passive: true });
   revealVisibleCards();
 
+  // --------------------------------------------------------------------------
+  // RSVP INVITATION ACCEPTANCE
+  // --------------------------------------------------------------------------
+  const KVDB_BUCKET = "J4wPbjxCGpL4zyN8NtsRiQ";
+
+  window.submitRsvp = async function (e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    const nameInput = document.getElementById("guestName");
+    const rsvpBtn = document.getElementById("rsvpBtn");
+    const rsvpSuccess = document.getElementById("rsvpSuccess");
+    const inputRow = document.querySelector(".rsvp-input-row");
+    const label = document.querySelector(".rsvp-label");
+
+    if (!nameInput) return;
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.focus();
+      return;
+    }
+
+    if (rsvpBtn) {
+      rsvpBtn.disabled = true;
+      const textSpan = rsvpBtn.querySelector(".btn-text");
+      const spinSpan = rsvpBtn.querySelector(".btn-spinner");
+      if (textSpan) textSpan.style.display = "none";
+      if (spinSpan) spinSpan.style.display = "inline";
+    }
+
+    const payload = {
+      name: name,
+      date: new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" }),
+      timestamp: Date.now()
+    };
+
+    try {
+      const key = "rsvp_" + Date.now() + "_" + Math.random().toString(36).substr(2, 6);
+      await fetch(`https://kvdb.io/${KVDB_BUCKET}/${key}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      localStorage.setItem("oks_my_rsvp", name);
+    } catch (err) {
+      console.warn("Could not save to remote KV, fallback to local:", err);
+      localStorage.setItem("oks_my_rsvp", name);
+    }
+
+    // Success UI
+    if (inputRow) inputRow.style.display = "none";
+    if (label) label.style.display = "none";
+    if (rsvpBtn) rsvpBtn.style.display = "none";
+    if (rsvpSuccess) {
+      rsvpSuccess.style.display = "block";
+      const title = rsvpSuccess.querySelector(".rsvp-success-title");
+      if (title) title.textContent = `${name}, чекаю на вас!`;
+    }
+  };
+
+  // Check if user already accepted
+  const savedName = localStorage.getItem("oks_my_rsvp");
+  if (savedName) {
+    const rsvpSuccess = document.getElementById("rsvpSuccess");
+    const inputRow = document.querySelector(".rsvp-input-row");
+    const label = document.querySelector(".rsvp-label");
+    const rsvpBtn = document.getElementById("rsvpBtn");
+
+    if (inputRow) inputRow.style.display = "none";
+    if (label) label.style.display = "none";
+    if (rsvpBtn) rsvpBtn.style.display = "none";
+    if (rsvpSuccess) {
+      rsvpSuccess.style.display = "block";
+      const title = rsvpSuccess.querySelector(".rsvp-success-title");
+      if (title) title.textContent = `${savedName}, чекаю на вас!`;
+      const desc = rsvpSuccess.querySelector(".rsvp-success-desc");
+      if (desc) desc.textContent = "Ви вже прийняли запрошення. До зустрічі 17 листопада! ❤️";
+    }
+  }
+
 })();

@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=3.2">
+  <link rel="stylesheet" href="css/style.css?v=3.3">
 </head>
 <body>
 
@@ -107,7 +107,7 @@
         <span class="station-eyebrow">✨ Початок свята</span>
         <h2 class="station-heading">Запрошую Вас на святкування!</h2>
         <div class="station-quote">
-          «Є особливі моменти, які хочеться розділити з найдорожчими людьми!»
+          «Є особливі моменти, які хочеться розділити з особливими людьми!»
         </div>
         <p class="station-body">
           Буду щиро рада бачити Вас серед гостей на святкуванні мого ювілею, яке відбудеться у теплій та святковій атмосфері.
@@ -176,7 +176,36 @@
         <div class="station-quote">
           «Приходьте розділити зі мною радість цього особливого дня, гарний настрій, щирі усмішки та незабутні миті!»
         </div>
-        <p class="station-body" style="text-align:center; font-size:24px; color:var(--color-gold-dark); margin-top:16px;">
+        
+        <!-- RSVP Acceptance Form -->
+        <div class="rsvp-card-box">
+          <form class="rsvp-form" id="rsvpForm" onsubmit="submitRsvp(event)">
+            <label for="guestName" class="rsvp-label">Напишіть, як вас звати:</label>
+            <div class="rsvp-input-row">
+              <input 
+                type="text" 
+                id="guestName" 
+                name="guestName" 
+                class="rsvp-input" 
+                placeholder="Ваше ім'я та прізвище" 
+                required 
+                autocomplete="name"
+                maxlength="70"
+              >
+            </div>
+            <button type="submit" class="rsvp-submit-btn" id="rsvpBtn">
+              <span class="btn-text">Прийняти запрошення 🥂</span>
+              <span class="btn-spinner" style="display:none;">Зберігаємо...</span>
+            </button>
+            <div class="rsvp-success-msg" id="rsvpSuccess" style="display:none;">
+              <div class="rsvp-success-icon">✨ 🥂 ✨</div>
+              <div class="rsvp-success-title">Чудово, чекаю на вас!</div>
+              <div class="rsvp-success-desc">Вашу відповідь успішно збережено. До зустрічі на святі! ❤️</div>
+            </div>
+          </form>
+        </div>
+
+        <p class="station-body" style="text-align:center; font-size:22px; color:var(--color-gold-dark); margin-top:20px;">
           З нетерпінням чекаю зустрічі! ❤️
         </p>
       </div>
@@ -199,8 +228,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <!-- World & Application Scripts -->
-  <script src="js/world.js?v=3.2"></script>
-  <script src="js/main.js?v=3.2"></script>
+  <script src="js/world.js?v=3.3"></script>
+  <script src="js/main.js?v=3.3"></script>
 
 </body>
 </html>
