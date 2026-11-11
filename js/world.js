@@ -1,11 +1,10 @@
 // ==========================================================================
 // WORLD.JS - DIRECT 3D TRACK MOVEMENT & IMMERSIVE 3D WORLD STATIONS
-// Three.js Track, Rolling Marble, Follow Camera, & Rich 3D Architectural Stations:
-// 1. Celebration Arch & Champagne
+// Three.js Track, Rolling Marble, Follow Camera, & 4 Rich 3D Architectural Stations:
+// 1. Celebration Arch & Champagne Set
 // 2. Sculptural 3D Calendar "17 Листопада" & 16:00 Clock
-// 3. Austrian Manor Restaurant «Австрійський двір» & Banquet Terrace with Cake
-// 4. Music Stage with Grand Piano, Cello, Floating Notes & Champagne Pyramid
-// 5. Giant Pulsing Golden Heart & Celebration Rotunda
+// 3. Austrian Manor Restaurant «Австрійський двір» & Banquet Terrace
+// 4. Grand Final Rotunda with Sculptural Golden 3D Heart (placed beyond the road)
 // ==========================================================================
 
 (function () {
@@ -19,7 +18,7 @@
   // Scene, Camera, Renderer
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf5efe6); // warm crema
-  scene.fog = new THREE.Fog(0xf5efe6, 22, 110);
+  scene.fog = new THREE.Fog(0xf5efe6, 22, 115);
 
   const camera = new THREE.PerspectiveCamera(
     isSmall ? 52 : 40,
@@ -70,17 +69,15 @@
   scene.add(worldGroup);
 
   // --------------------------------------------------------------------------
-  // 3D CATMULL-ROM CURVED TRACK (LONG & DYNAMIC ROLLERCOASTER CURVE)
+  // 3D CATMULL-ROM CURVED TRACK (CLEAN FINISH BEFORE FINAL ROTUNDA)
   // --------------------------------------------------------------------------
   const pathPoints = [
-    new THREE.Vector3(0, 0, 10),       // 0.00: Start / Card spawn
-    new THREE.Vector3(0, -0.6, -4),    // 0.08: Heading onto main track
-    new THREE.Vector3(5.5, -2.4, -22), // 0.20: Station 1 - Greeting Arch
-    new THREE.Vector3(-4.5, -4.8, -42),// 0.40: Station 2 - 3D Calendar Pavilion
-    new THREE.Vector3(6.5, -7.5, -64), // 0.60: Station 3 - Restaurant & Dining Table
-    new THREE.Vector3(-5.0, -10.2, -86),// 0.80: Station 4 - Program & Music Stage
-    new THREE.Vector3(0, -12.4, -108), // 0.94: Station 5 - Final Golden Heart
-    new THREE.Vector3(0, -13.0, -118)  // 1.00: Finish
+    new THREE.Vector3(0, 0, 10),        // 0.00: Start / Card spawn
+    new THREE.Vector3(0, -0.6, -2),     // 0.08: Heading onto main track
+    new THREE.Vector3(5.5, -2.4, -22),  // 0.25: Station 1 - Greeting Arch
+    new THREE.Vector3(-5.5, -5.2, -48), // 0.52: Station 2 - Calendar Pavilion
+    new THREE.Vector3(5.5, -8.0, -74),  // 0.76: Station 3 - Restaurant
+    new THREE.Vector3(0, -10.5, -96)    // 1.00: Road finish line directly before the Rotunda steps!
   ];
 
   const trackCurve = new THREE.CatmullRomCurve3(pathPoints, false, "catmullrom", 0.35);
@@ -117,7 +114,7 @@
   const matBottle = new THREE.MeshStandardMaterial({ color: 0x224422, roughness: 0.25, metalness: 0.3 });
   const matCake = new THREE.MeshStandardMaterial({ color: 0xfffdf7, roughness: 0.5 });
   const matHeart = new THREE.MeshStandardMaterial({
-    color: 0xe6b872,
+    color: 0xdfb478,
     metalness: 0.85,
     roughness: 0.2,
     emissive: 0x3d2910,
@@ -218,8 +215,7 @@
   // Store references for dynamic animation
   const animatedObjects = {
     heart: null,
-    heartBaseY: 0,
-    notes: []
+    heartBaseY: 0
   };
 
   // Helper: Small crisp plaque canvas texture
@@ -248,17 +244,16 @@
   }
 
   // --------------------------------------------------------------------------
-  // STATION 1: 3D GRAND CELEBRATION ARCH & CHAMPAGNE SET (t ≈ 0.20)
+  // STATION 1: 3D GRAND CELEBRATION ARCH & CHAMPAGNE SET (t ≈ 0.25)
   // --------------------------------------------------------------------------
   (function buildStation1() {
-    const { pos, tan, side } = getFrameAt(0.20);
+    const { pos, tan, side } = getFrameAt(0.25);
     const stationGroup = new THREE.Group();
 
     // 1. Grand Arch spanning right across the track
     const archGroup = new THREE.Group();
     archGroup.position.copy(pos);
 
-    // Left and Right fluted Classical Columns
     [-2.3, 2.3].forEach((offset) => {
       // Pedestal
       const base = new THREE.Mesh(new THREE.BoxGeometry(0.85, 0.45, 0.85), matCreamTrack);
@@ -285,7 +280,7 @@
       archGroup.add(pGroup);
     });
 
-    // Arch Overhead Vault (Curved Torus Segment)
+    // Arch Overhead Vault
     const archCurve = new THREE.Mesh(
       new THREE.TorusGeometry(2.3, 0.18, 16, 32, Math.PI),
       matGoldShine
@@ -314,7 +309,6 @@
     const sideTable = new THREE.Group();
     sideTable.position.copy(pos).addScaledVector(side, 4.6).addScaledVector(UP, 0.2);
 
-    // Table pedestal
     const tBase = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.95, 0.2, 24), matCreamTrack);
     tBase.position.y = 0.1;
     const tStem = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.25, 1.2, 16), matGoldRails);
@@ -324,7 +318,7 @@
     tTop.castShadow = true;
     sideTable.add(tBase, tStem, tTop);
 
-    // Silver Champagne Bucket (Wine Cooler)
+    // Silver Champagne Bucket
     const bucket = new THREE.Mesh(
       new THREE.CylinderGeometry(0.38, 0.28, 0.55, 16),
       new THREE.MeshStandardMaterial({ color: 0xd8d8d8, metalness: 0.9, roughness: 0.15 })
@@ -351,7 +345,6 @@
       sideTable.add(flute, stem);
     });
 
-    // Warm soft welcome light
     const welcomeLight = new THREE.PointLight(0xffdfa8, 1.8, 8);
     welcomeLight.position.set(0, 2.5, 0);
     sideTable.add(welcomeLight);
@@ -361,12 +354,12 @@
   })();
 
   // --------------------------------------------------------------------------
-  // STATION 2: 3D SCULPTURAL CALENDAR & CLOCK PAVILION (t ≈ 0.40)
+  // STATION 2: 3D SCULPTURAL CALENDAR "17 ЛИСТОПАДА" & CLOCK PAVILION (t ≈ 0.52)
   // --------------------------------------------------------------------------
   (function buildStation2() {
-    const { pos, tan, side } = getFrameAt(0.40);
+    const { pos, tan, side } = getFrameAt(0.52);
     const stationGroup = new THREE.Group();
-    stationGroup.position.copy(pos).addScaledVector(side, -4.6).addScaledVector(UP, 0.2);
+    stationGroup.position.copy(pos).addScaledVector(side, -4.8).addScaledVector(UP, 0.2);
 
     // 1. Classical Multi-Tier Stepped Podium
     const base1 = new THREE.Mesh(new THREE.CylinderGeometry(3.6, 3.8, 0.3, 32), matCreamTrack);
@@ -379,101 +372,109 @@
     base2.castShadow = true;
     stationGroup.add(base1, base2);
 
-    // 2. Colonnade Canopy with 4 Golden Pillars & Cupola
+    // 2. Colonnade with 4 Golden Pillars & Cupola perfectly seated
     const canopyGroup = new THREE.Group();
     const pillarRadius = 2.4;
+    const pillarH = 3.6;
     for (let i = 0; i < 4; i++) {
       const ang = (i * Math.PI) / 2 + Math.PI / 4;
       const px = Math.cos(ang) * pillarRadius;
       const pz = Math.sin(ang) * pillarRadius;
-      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, 3.6, 16), matGoldRails);
-      col.position.set(px, 2.35, pz);
+      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.15, pillarH, 16), matGoldRails);
+      col.position.set(px, 0.42 + pillarH / 2, pz);
       col.castShadow = true;
       canopyGroup.add(col);
     }
 
-    // Dome Roof
+    // Dome Ring & Roof sitting directly on columns
+    const domeTopY = 0.42 + pillarH;
     const domeRing = new THREE.Mesh(new THREE.TorusGeometry(pillarRadius, 0.12, 12, 32), matGoldShine);
     domeRing.rotation.x = Math.PI / 2;
-    domeRing.position.y = 4.2;
+    domeRing.position.y = domeTopY;
+
+    // Dome canopy sitting directly on the ring
     const domeRoof = new THREE.Mesh(
-      new THREE.SphereGeometry(pillarRadius * 0.95, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.45),
+      new THREE.CylinderGeometry(0.2, pillarRadius, 0.9, 32),
       matCreamTrack
     );
-    domeRoof.position.y = 4.2;
-    const finial = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.1, 0.8, 12), matGoldShine);
-    finial.position.y = 5.6;
+    domeRoof.position.y = domeTopY + 0.45;
+
+    const finial = new THREE.Mesh(new THREE.SphereGeometry(0.2, 16, 16), matGoldShine);
+    finial.position.y = domeTopY + 1.0;
     canopyGroup.add(domeRing, domeRoof, finial);
     stationGroup.add(canopyGroup);
 
-    // 3. 3D Monumental Desk Calendar ("17 Листопада")
+    // 3. High-Res Calligraphic Calendar Block
     const calGroup = new THREE.Group();
-    calGroup.position.set(-0.3, 0.55, 0.2);
+    calGroup.position.set(-0.2, 0.55, 0.2);
 
-    // Angled Easel / Stand
     const stand = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.18, 1.6), matWood);
     stand.position.set(0, 0.1, 0);
     calGroup.add(stand);
 
-    // Main Calendar Block tilted backwards
-    const calBlock = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.4, 0.28), matWhiteLinen);
+    const calBlock = new THREE.Mesh(new THREE.BoxGeometry(2.2, 2.5, 0.25), matWhiteLinen);
     calBlock.position.set(0, 1.45, 0);
-    calBlock.rotation.x = -0.18; // tilt back slightly
+    calBlock.rotation.x = -0.16;
     calBlock.castShadow = true;
     calGroup.add(calBlock);
 
-    // Top Burgundy Month Header Bar ("ЛИСТОПАД 2026")
-    const headerMat = new THREE.MeshStandardMaterial({
-      map: createPlaqueTexture("ЛИСТОПАД 2026", "Вівторок"),
-      roughness: 0.3
-    });
-    const headerMesh = new THREE.Mesh(new THREE.PlaneGeometry(2.1, 0.55), headerMat);
-    headerMesh.position.set(0, 2.35, 0.16);
-    headerMesh.rotation.x = -0.18;
-    calGroup.add(headerMesh);
+    // Render a crisp calligraphic calendar front texture
+    const calCanvas = document.createElement("canvas");
+    calCanvas.width = 512;
+    calCanvas.height = 580;
+    const ctx = calCanvas.getContext("2d");
+
+    ctx.fillStyle = "#faf7f2";
+    ctx.fillRect(0, 0, 512, 580);
+
+    // Top gold month banner
+    ctx.fillStyle = "#9e7d52";
+    ctx.fillRect(0, 0, 512, 110);
+    ctx.fillStyle = "#ffffff";
+    ctx.textAlign = "center";
+    ctx.font = "bold 44px 'Playfair Display', serif";
+    ctx.fillText("ЛИСТОПАД 2026", 256, 72);
+
+    // Big Calligraphic "17"
+    ctx.fillStyle = "#c8a87c";
+    ctx.font = "bold 210px 'Playfair Display', serif";
+    ctx.fillText("17", 256, 360);
+
+    // Subtext
+    ctx.fillStyle = "#554d45";
+    ctx.font = "italic 36px 'Cormorant Garamond', serif";
+    ctx.fillText("Вівторок  •  16:00", 256, 440);
+
+    ctx.strokeStyle = "#c8a87c";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(10, 10, 492, 560);
+
+    const calTexture = new THREE.CanvasTexture(calCanvas);
+    calTexture.minFilter = THREE.LinearFilter;
+
+    const calFront = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.1, 2.4),
+      new THREE.MeshStandardMaterial({ map: calTexture, roughness: 0.3 })
+    );
+    calFront.position.set(0, 1.45, 0.14);
+    calFront.rotation.x = -0.16;
+    calGroup.add(calFront);
 
     // Golden Spiral Ring Bindings along top
     for (let c = -0.85; c <= 0.85; c += 0.34) {
       const ring = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.03, 8, 16), matGoldShine);
-      ring.position.set(c, 2.65, -0.05);
+      ring.position.set(c, 2.72, -0.05);
       ring.rotation.y = Math.PI / 2;
       calGroup.add(ring);
     }
 
-    // Sculptural 3D Golden "17"
-    const numGroup = new THREE.Group();
-    numGroup.position.set(0, 1.35, 0.18);
-    numGroup.rotation.x = -0.18;
-
-    // Numeral "1"
-    const n1Stem = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.1, 12), matGoldShine);
-    n1Stem.position.set(-0.35, 0, 0);
-    const n1Serif = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.35, 12), matGoldShine);
-    n1Serif.position.set(-0.48, 0.45, 0);
-    n1Serif.rotation.z = 0.7;
-    numGroup.add(n1Stem, n1Serif);
-
-    // Numeral "7"
-    const n7Top = new THREE.Mesh(new THREE.BoxGeometry(0.72, 0.12, 0.12), matGoldShine);
-    n7Top.position.set(0.35, 0.5, 0);
-    const n7Leg = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 1.15, 12), matGoldShine);
-    n7Leg.position.set(0.32, -0.04, 0);
-    n7Leg.rotation.z = 0.28;
-    numGroup.add(n7Top, n7Leg);
-
-    // Golden Laurel Wreath Ring around "17"
-    const wreath = new THREE.Mesh(new THREE.TorusGeometry(0.92, 0.05, 12, 32), matGoldRails);
-    wreath.position.set(0, 0, 0.04);
-    numGroup.add(wreath);
-
-    calGroup.add(numGroup);
     stationGroup.add(calGroup);
 
     // 4. Antique Standing Clock pointing accurately to 16:00
     const clockGroup = new THREE.Group();
-    clockGroup.position.set(1.6, 0.55, 0.3);
+    clockGroup.position.set(1.7, 0.55, 0.3);
 
-    const clockStem = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.15, 1.6, 16), matGoldRails);
+    const clockStem = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.14, 1.6, 16), matGoldRails);
     clockStem.position.y = 0.8;
     const clockBody = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.16, 24), matGoldShine);
     clockBody.position.y = 1.95;
@@ -481,17 +482,16 @@
     const clockFace = new THREE.Mesh(new THREE.CircleGeometry(0.5, 24), matWhiteLinen);
     clockFace.position.set(0, 1.95, 0.09);
 
-    // Clock Hands set to 16:00 (Hour hand at 4 o'clock, Minute hand at 12 o'clock)
+    // Hands set to 16:00 (Hour hand at 4 o'clock, Minute hand at 12 o'clock)
     const hourHand = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.24, 0.02), matWood);
     hourHand.position.set(0.08, 1.88, 0.11);
-    hourHand.rotation.z = -2.1; // ~4 o'clock
+    hourHand.rotation.z = -2.1;
     const minuteHand = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.38, 0.02), matWood);
-    minuteHand.position.set(0, 2.12, 0.11); // 12 o'clock
+    minuteHand.position.set(0, 2.12, 0.11);
 
     clockGroup.add(clockStem, clockBody, clockFace, hourHand, minuteHand);
     stationGroup.add(clockGroup);
 
-    // Soft warm illumination
     const calLight = new THREE.PointLight(0xffdfa8, 1.6, 8);
     calLight.position.set(0, 3.0, 1.2);
     stationGroup.add(calLight);
@@ -500,10 +500,10 @@
   })();
 
   // --------------------------------------------------------------------------
-  // STATION 3: 3D AUSTRIAN MANOR RESTAURANT & DINING TERRACE (t ≈ 0.60)
+  // STATION 3: 3D AUSTRIAN MANOR RESTAURANT & DINING TERRACE (t ≈ 0.76)
   // --------------------------------------------------------------------------
   (function buildStation3() {
-    const { pos, tan, side } = getFrameAt(0.60);
+    const { pos, tan, side } = getFrameAt(0.76);
     const stationGroup = new THREE.Group();
     stationGroup.position.copy(pos).addScaledVector(side, 5.2).addScaledVector(UP, 0.2);
 
@@ -511,7 +511,6 @@
     const houseGroup = new THREE.Group();
     houseGroup.position.set(0, 0, 0);
 
-    // Main Building block in warm cream stucco
     const walls = new THREE.Mesh(new THREE.BoxGeometry(4.8, 3.4, 3.4), matCreamTrack);
     walls.position.set(0, 1.7, -1.8);
     walls.castShadow = true;
@@ -526,7 +525,6 @@
     fBeam2.position.set(0, 3.35, -0.06);
     houseGroup.add(fBeam1, fBeam2);
 
-    // Vertical beams
     [-2.35, -0.8, 0.8, 2.35].forEach((bx) => {
       const vBeam = new THREE.Mesh(new THREE.BoxGeometry(0.12, 3.4, 0.08), beamMat);
       vBeam.position.set(bx, 1.7, -0.06);
@@ -538,7 +536,6 @@
       [1.0, 2.5].forEach((wy) => {
         const win = new THREE.Mesh(new THREE.PlaneGeometry(0.85, 0.85), matWindowGlow);
         win.position.set(wx, wy, -0.07);
-        // Window frame
         const frame = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.95, 0.06), matWood);
         frame.position.set(wx, wy, -0.09);
         houseGroup.add(win, frame);
@@ -552,7 +549,7 @@
     handle.position.set(0.38, 0.85, -0.01);
     houseGroup.add(door, handle);
 
-    // Hanging Restaurant Signboard ("Австрійський двір")
+    // Hanging Restaurant Signboard
     const signMat = new THREE.MeshStandardMaterial({
       map: createPlaqueTexture("«Австрійський двір»", "Ресторан"),
       roughness: 0.3
@@ -561,7 +558,7 @@
     signBoard.position.set(0, 2.15, -0.04);
     houseGroup.add(signBoard);
 
-    // Pitched Alpine Gabled Roof in Terracotta Tiles
+    // Pitched Alpine Roof
     const roofLeft = new THREE.Mesh(new THREE.BoxGeometry(2.9, 0.16, 3.8), matRoof);
     roofLeft.position.set(-1.25, 4.0, -1.8);
     roofLeft.rotation.z = 0.55;
@@ -572,32 +569,30 @@
     roofRight.rotation.z = -0.55;
     roofRight.castShadow = true;
 
-    // Chimney
     const chimney = new THREE.Mesh(new THREE.BoxGeometry(0.55, 1.4, 0.55), matRoof);
     chimney.position.set(1.4, 4.7, -2.4);
     houseGroup.add(roofLeft, roofRight, chimney);
 
     stationGroup.add(houseGroup);
 
-    // 2. Outdoor Festive Banquet Terrace (Stone patio, Banquet Table, Cake & Candelabra)
+    // 2. Outdoor Festive Banquet Terrace
     const terraceGroup = new THREE.Group();
     terraceGroup.position.set(0, 0, 1.5);
 
-    // Stone patio base
     const patio = new THREE.Mesh(new THREE.BoxGeometry(4.4, 0.22, 3.2), matCreamTrack);
     patio.position.set(0, 0.11, 0);
     patio.receiveShadow = true;
     terraceGroup.add(patio);
 
-    // Round Banquet Table with white drape
-    const tableBase = new THREE.Mesh(new THREE.CylinderGeometry(1.35, 1.45, 0.85, 24), matWhiteLinen);
+    // Banquet Table with draped white cloth
+    const tableBase = new THREE.Mesh(new THREE.CylinderGeometry(1.2, 1.3, 0.85, 24), matWhiteLinen);
     tableBase.position.set(0, 0.65, 0);
     tableBase.castShadow = true;
     terraceGroup.add(tableBase);
 
-    // 4 Miniature Golden Banquet Chairs around table
-    [-1.2, 1.2].forEach((cx) => {
-      [-0.9, 0.9].forEach((cz) => {
+    // 4 Banquet Chairs
+    [-1.1, 1.1].forEach((cx) => {
+      [-0.8, 0.8].forEach((cz) => {
         const chair = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.45, 0.35), matWood);
         chair.position.set(cx, 0.45, cz);
         const back = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.45, 0.05), matGoldRails);
@@ -610,42 +605,39 @@
     const cakeGroup = new THREE.Group();
     cakeGroup.position.set(0, 1.08, 0);
 
-    const c1 = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.5, 0.22, 24), matCake);
-    c1.position.y = 0.11;
-    const c2 = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.36, 0.18, 24), matCake);
-    c2.position.y = 0.31;
-    const c3 = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.14, 24), matCake);
-    c3.position.y = 0.47;
+    const c1 = new THREE.Mesh(new THREE.CylinderGeometry(0.44, 0.46, 0.2, 24), matCake);
+    c1.position.y = 0.1;
+    const c2 = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.32, 0.16, 24), matCake);
+    c2.position.y = 0.28;
+    const c3 = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.2, 0.12, 24), matCake);
+    c3.position.y = 0.42;
 
-    // Glowing candle on top
     const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.15, 8), matWhiteLinen);
-    candle.position.y = 0.62;
+    candle.position.y = 0.54;
     const flame = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), matWindowGlow);
-    flame.position.y = 0.72;
+    flame.position.y = 0.64;
 
     cakeGroup.add(c1, c2, c3, candle, flame);
     terraceGroup.add(cakeGroup);
 
-    // Golden Candelabra beside the cake
+    // Golden Candelabra
     const candelabra = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.08, 0.45, 12), matGoldShine);
     candelabra.position.set(0.65, 1.3, 0.2);
     terraceGroup.add(candelabra);
 
-    // Pergola timber posts with hanging bistro string lights
+    // Pergola posts with hanging bistro string lights
     [-2.0, 2.0].forEach((px) => {
       const post = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 2.8, 12), matWood);
       post.position.set(px, 1.4, 1.2);
       terraceGroup.add(post);
     });
 
-    // Hanging string light bulbs with warm glow
     for (let bx = -1.6; bx <= 1.6; bx += 0.8) {
       const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.09, 8, 8), matWindowGlow);
       bulb.position.set(bx, 2.7 - Math.abs(bx) * 0.12, 1.2);
       terraceGroup.add(bulb);
     }
 
-    // Warm terrace bistro point light
     const terraceLight = new THREE.PointLight(0xffcc77, 2.0, 10);
     terraceLight.position.set(0, 2.5, 0.8);
     terraceGroup.add(terraceLight);
@@ -655,221 +647,100 @@
   })();
 
   // --------------------------------------------------------------------------
-  // STATION 4: 3D MUSIC STAGE & PROGRAM TIMELINE (t ≈ 0.80)
+  // STATION 4: GRAND FINAL ROTUNDA & 3D SCULPTURAL GOLDEN HEART (BEYOND ROAD END)
   // --------------------------------------------------------------------------
   (function buildStation4() {
-    const { pos, tan, side } = getFrameAt(0.80);
+    // Placed strictly beyond the end of the road (road ends at z = -96, rotunda is at z = -108)
+    const rotundaCenter = new THREE.Vector3(0, -10.8, -108);
     const stationGroup = new THREE.Group();
-    stationGroup.position.copy(pos).addScaledVector(side, -4.8).addScaledVector(UP, 0.2);
+    stationGroup.position.copy(rotundaCenter);
 
-    // 1. Amphitheater Elevated Stage Platform with Gold Trim
-    const stage = new THREE.Mesh(new THREE.CylinderGeometry(3.2, 3.4, 0.4, 32), matWood);
-    stage.position.y = 0.2;
-    stage.castShadow = true;
-    stage.receiveShadow = true;
-
-    const stageRim = new THREE.Mesh(new THREE.TorusGeometry(3.3, 0.08, 12, 32), matGoldRails);
-    stageRim.rotation.x = Math.PI / 2;
-    stageRim.position.y = 0.4;
-    stationGroup.add(stage, stageRim);
-
-    // 2. Stylized 3D Grand Piano in Gloss Wood with Open Lid
-    const pianoGroup = new THREE.Group();
-    pianoGroup.position.set(-0.6, 0.4, -0.2);
-
-    // Piano body
-    const pBody = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.35, 1.4), matWood);
-    pBody.position.y = 0.9;
-    pBody.castShadow = true;
-
-    // Curved tail
-    const pTail = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.7, 0.35, 16, 1, false, 0, Math.PI), matWood);
-    pTail.position.set(0, 0.9, -0.7);
-    pTail.rotation.y = Math.PI / 2;
-
-    // 3 Piano legs
-    [[-0.65, 0.45, 0.5], [0.65, 0.45, 0.5], [0, 0.45, -1.1]].forEach(([lx, ly, lz]) => {
-      const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.08, 0.9, 12), matWood);
-      leg.position.set(lx, ly, lz);
-      pianoGroup.add(leg);
-    });
-
-    // Keyboard bed & Keys
-    const keys = new THREE.Mesh(new THREE.BoxGeometry(1.4, 0.08, 0.25), matWhiteLinen);
-    keys.position.set(0, 0.98, 0.72);
-
-    // Open Propped Piano Lid
-    const lid = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.05, 1.4), matWood);
-    lid.position.set(0, 1.45, -0.1);
-    lid.rotation.z = -0.35; // angled open
-
-    const propStick = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.65, 8), matGoldRails);
-    propStick.position.set(0.55, 1.25, 0.1);
-
-    pianoGroup.add(pBody, pTail, keys, lid, propStick);
-    stationGroup.add(pianoGroup);
-
-    // 3. Golden Cello / Contrabass on Stand
-    const celloGroup = new THREE.Group();
-    celloGroup.position.set(1.5, 0.4, 0.5);
-
-    const cBody = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 1.1, 16), matGoldRails);
-    cBody.position.y = 0.85;
-    const cNeck = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.8, 8), matWood);
-    cNeck.position.y = 1.7;
-    const cStand = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.08, 0.6, 8), matGoldShine);
-    cStand.position.y = 0.3;
-    celloGroup.add(cBody, cNeck, cStand);
-    stationGroup.add(celloGroup);
-
-    // 4. Champagne Glass Pyramid (3 tiers of crystal coupes)
-    const towerGroup = new THREE.Group();
-    towerGroup.position.set(1.6, 0.4, -1.4);
-
-    const tStand = new THREE.Mesh(new THREE.CylinderGeometry(0.7, 0.8, 0.6, 16), matCreamTrack);
-    tStand.position.y = 0.3;
-    towerGroup.add(tStand);
-
-    // 3 tiers of crystal coupes
-    [
-      { y: 0.68, count: 6, r: 0.38 },
-      { y: 0.98, count: 3, r: 0.2 },
-      { y: 1.28, count: 1, r: 0 }
-    ].forEach((tier) => {
-      for (let g = 0; g < tier.count; g++) {
-        const ang = (g * Math.PI * 2) / tier.count;
-        const coupe = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.02, 0.18, 8), matGlass);
-        coupe.position.set(Math.cos(ang) * tier.r, tier.y, Math.sin(ang) * tier.r);
-        towerGroup.add(coupe);
-      }
-    });
-    stationGroup.add(towerGroup);
-
-    // 5. Floating 3D Golden Musical Notes (animated in renderLoop)
-    const notesGroup = new THREE.Group();
-    notesGroup.position.set(0, 1.8, 0);
-
-    const noteCoords = [
-      { x: -0.8, y: 0.5, z: 0.6 },
-      { x: 0.4, y: 1.1, z: 0.8 },
-      { x: -0.3, y: 1.6, z: -0.5 },
-      { x: 0.9, y: 2.0, z: -0.2 }
-    ];
-
-    noteCoords.forEach((nc, idx) => {
-      const noteItem = new THREE.Group();
-      // Note head
-      const head = new THREE.Mesh(new THREE.SphereGeometry(0.12, 12, 10), matGoldShine);
-      head.scale.set(1.2, 0.8, 0.5);
-      // Note stem
-      const stem = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.45, 8), matGoldShine);
-      stem.position.set(0.12, 0.22, 0);
-      noteItem.add(head, stem);
-      noteItem.position.set(nc.x, nc.y, nc.z);
-      noteItem.baseY = nc.y;
-      notesGroup.add(noteItem);
-      animatedObjects.notes.push(noteItem);
-    });
-
-    stationGroup.add(notesGroup);
-
-    // 4 Timeline Milestone Golden Lanterns
-    [-1.8, -0.6, 0.6, 1.8].forEach((lx) => {
-      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.07, 1.4, 8), matGoldRails);
-      post.position.set(lx, 1.1, 1.6);
-      const lantern = new THREE.Mesh(new THREE.SphereGeometry(0.12, 8, 8), matWindowGlow);
-      lantern.position.set(lx, 1.85, 1.6);
-      stationGroup.add(post, lantern);
-    });
-
-    // Stage spotlight
-    const stageLight = new THREE.PointLight(0xffdfa8, 2.0, 9);
-    stageLight.position.set(0, 3.2, 0);
-    stationGroup.add(stageLight);
-
-    worldGroup.add(stationGroup);
-  })();
-
-  // --------------------------------------------------------------------------
-  // STATION 5: 3D GIANT GOLDEN HEART & CELEBRATION ROTUNDA (t ≈ 0.94)
-  // --------------------------------------------------------------------------
-  (function buildStation5() {
-    const { pos, tan, side } = getFrameAt(0.94);
-    const stationGroup = new THREE.Group();
-    stationGroup.position.copy(pos).addScaledVector(UP, 0.2);
-
-    // 1. Classical Grand Octagonal Rotunda Pavilion
+    // 1. Classical Grand Octagonal Rotunda Pavilion (Steps lead from track end)
     const rotundaGroup = new THREE.Group();
 
-    // Marble steps
-    const rBase1 = new THREE.Mesh(new THREE.CylinderGeometry(4.0, 4.3, 0.35, 32), matCreamTrack);
+    // Marble steps: lowest step extends toward the road
+    const rBase1 = new THREE.Mesh(new THREE.CylinderGeometry(4.2, 4.6, 0.35, 32), matCreamTrack);
     rBase1.position.y = 0.17;
     rBase1.receiveShadow = true;
-    const rBase2 = new THREE.Mesh(new THREE.CylinderGeometry(3.3, 3.5, 0.3, 32), matCreamTrack);
+
+    const rBase2 = new THREE.Mesh(new THREE.CylinderGeometry(3.5, 3.8, 0.3, 32), matCreamTrack);
     rBase2.position.y = 0.48;
     rotundaGroup.add(rBase1, rBase2);
 
-    // 8 Classical Golden Pillars in circle
-    const pillarR = 2.8;
+    // 8 Classical Golden Pillars arranged around perimeter (r = 2.9)
+    const pillarR = 2.9;
+    const colH = 4.2;
     for (let i = 0; i < 8; i++) {
       const ang = (i * Math.PI * 2) / 8;
       const px = Math.cos(ang) * pillarR;
       const pz = Math.sin(ang) * pillarR;
 
-      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, 4.2, 16), matPillars);
-      col.position.set(px, 2.7, pz);
+      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.18, colH, 16), matPillars);
+      col.position.set(px, 0.48 + colH / 2, pz);
       col.castShadow = true;
 
       const cap = new THREE.Mesh(new THREE.BoxGeometry(0.5, 0.25, 0.5), matGoldShine);
-      cap.position.set(px, 4.85, pz);
+      cap.position.set(px, 0.48 + colH + 0.12, pz);
 
       rotundaGroup.add(col, cap);
     }
 
     // Dome Entablature & Crown
+    const domeTopY = 0.48 + colH + 0.24;
     const domeRing = new THREE.Mesh(new THREE.TorusGeometry(pillarR, 0.16, 12, 32), matGoldShine);
     domeRing.rotation.x = Math.PI / 2;
-    domeRing.position.y = 4.95;
+    domeRing.position.y = domeTopY;
 
-    // Open gilded dome ribs
+    // Dome crown ribs
     const domeCrown = new THREE.Mesh(
-      new THREE.SphereGeometry(pillarR * 0.95, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.4),
+      new THREE.SphereGeometry(pillarR * 0.95, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.42),
       matGoldRails
     );
-    domeCrown.position.y = 4.95;
+    domeCrown.position.y = domeTopY;
+
     const topSpire = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.12, 1.1, 12), matGoldShine);
-    topSpire.position.y = 6.6;
+    topSpire.position.y = domeTopY + 1.5;
 
     rotundaGroup.add(domeRing, domeCrown, topSpire);
     stationGroup.add(rotundaGroup);
 
-    // 2. Giant Gleaming 3D Golden Heart (Pulse & Spin animated in renderLoop)
-    const heartGroup = new THREE.Group();
-    heartGroup.position.set(0, 2.6, 0);
+    // 2. TRUE 3D EXTRUDED BEVELED GOLDEN HEART (Smooth, Rounded, Jewelry-Grade)
+    const heartShape = new THREE.Shape();
+    heartShape.moveTo(0, 0.9);
+    heartShape.bezierCurveTo(0, 1.4, -0.75, 1.85, -1.45, 1.85);
+    heartShape.bezierCurveTo(-2.3, 1.85, -2.3, 0.9, -2.3, 0.9);
+    heartShape.bezierCurveTo(-2.3, 0.1, -1.35, -0.85, 0, -2.0);
+    heartShape.bezierCurveTo(1.35, -0.85, 2.3, 0.1, 2.3, 0.9);
+    heartShape.bezierCurveTo(2.3, 0.9, 2.3, 1.85, 1.45, 1.85);
+    heartShape.bezierCurveTo(0.75, 1.85, 0, 1.4, 0, 0.9);
 
-    // Left lobe sphere
-    const sL = new THREE.Mesh(new THREE.SphereGeometry(0.72, 24, 18), matHeart);
-    sL.position.set(-0.46, 0.45, 0);
+    const extrudeSettings = {
+      depth: 0.65,
+      bevelEnabled: true,
+      bevelSegments: 8,
+      steps: 2,
+      bevelSize: 0.25,
+      bevelThickness: 0.25
+    };
 
-    // Right lobe sphere
-    const sR = new THREE.Mesh(new THREE.SphereGeometry(0.72, 24, 18), matHeart);
-    sR.position.set(0.46, 0.45, 0);
+    const heartGeo = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
+    heartGeo.center();
 
-    // Bottom inverted cone taper
-    const cone = new THREE.Mesh(new THREE.ConeGeometry(1.08, 1.6, 24), matHeart);
-    cone.position.set(0, -0.32, 0);
-    cone.rotation.z = Math.PI;
+    const heartMesh = new THREE.Mesh(heartGeo, matHeart);
+    heartMesh.scale.set(0.72, 0.72, 0.72);
 
-    // Golden Celebration Ribbon wrapped around heart
-    const ribbon = new THREE.Mesh(new THREE.TorusGeometry(1.15, 0.06, 12, 32), matGoldShine);
-    ribbon.position.set(0, 0.15, 0);
+    // Decorative golden ribbon ring around heart
+    const ribbon = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.06, 12, 32), matGoldShine);
     ribbon.rotation.x = Math.PI / 2.8;
 
-    heartGroup.add(sL, sR, cone, ribbon);
-    stationGroup.add(heartGroup);
+    const heartContainer = new THREE.Group();
+    heartContainer.position.set(0, 2.5, 0);
+    heartContainer.add(heartMesh, ribbon);
 
-    animatedObjects.heart = heartGroup;
-    animatedObjects.heartBaseY = 2.6;
+    stationGroup.add(heartContainer);
+
+    animatedObjects.heart = heartContainer;
+    animatedObjects.heartBaseY = 2.5;
 
     // 3. Wrapped Celebration Gift Boxes at base
     const boxMat1 = new THREE.MeshStandardMaterial({ color: 0xfdfaf6, roughness: 0.3 });
@@ -878,13 +749,12 @@
     [
       { x: -1.2, z: 1.1, s: 0.75, mat: boxMat1 },
       { x: 1.1, z: 1.3, s: 0.65, mat: boxMat2 },
-      { x: 0.1, z: 1.7, s: 0.85, mat: boxMat1 }
+      { x: 0.1, z: 1.6, s: 0.85, mat: boxMat1 }
     ].forEach((gb) => {
       const box = new THREE.Mesh(new THREE.BoxGeometry(gb.s, gb.s * 0.8, gb.s), gb.mat);
       box.position.set(gb.x, 0.65 + (gb.s * 0.8) / 2, gb.z);
       box.castShadow = true;
 
-      // Golden ribbon cross
       const rib1 = new THREE.Mesh(new THREE.BoxGeometry(gb.s + 0.02, gb.s * 0.82, 0.1), matGoldShine);
       rib1.position.copy(box.position);
       const rib2 = new THREE.Mesh(new THREE.BoxGeometry(0.1, gb.s * 0.82, gb.s + 0.02), matGoldShine);
@@ -893,9 +763,8 @@
       stationGroup.add(box, rib1, rib2);
     });
 
-    // Warm radial celebratory heart illumination
-    const heartGlow = new THREE.PointLight(0xffdfa8, 2.5, 12);
-    heartGlow.position.set(0, 3.2, 0);
+    const heartGlow = new THREE.PointLight(0xffdfa8, 2.5, 14);
+    heartGlow.position.set(0, 3.0, 0);
     stationGroup.add(heartGlow);
 
     worldGroup.add(stationGroup);
@@ -904,7 +773,7 @@
   // --------------------------------------------------------------------------
   // FLOATING PARTICLES & GOLDEN GLOW IN THE AIR
   // --------------------------------------------------------------------------
-  const orbCount = 50;
+  const orbCount = 45;
   const orbGeo = new THREE.SphereGeometry(0.12, 16, 12);
   const orbMat = new THREE.MeshStandardMaterial({
     color: 0xd9b88c,
@@ -941,7 +810,6 @@
   }
   window.addEventListener("scroll", syncScrollToProgress, { passive: true });
 
-  // Direct wheel & touch fallback
   window.addEventListener("wheel", (e) => {
     if (!window.__isEnvelopeOpened) return;
     const scrollH = document.documentElement.scrollHeight - window.innerHeight;
@@ -973,7 +841,7 @@
     pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
   }, { passive: true });
 
-  // Progress rail updates
+  // Progress rail updates (4 stations: 0: Start, 1: Greeting, 2: Calendar, 3: Restaurant, 4: Meeting)
   const trackFill = document.querySelector(".track-fill");
   const trackBallUI = document.querySelector(".track-ball");
   const stationItems = document.querySelectorAll(".track-station-item");
@@ -982,7 +850,7 @@
     if (trackFill) trackFill.style.height = `${p * 100}%`;
     if (trackBallUI) trackBallUI.style.top = `${p * 100}%`;
 
-    const activeIndex = p < 0.12 ? 0 : p < 0.32 ? 1 : p < 0.52 ? 2 : p < 0.72 ? 3 : p < 0.90 ? 4 : 5;
+    const activeIndex = p < 0.15 ? 0 : p < 0.38 ? 1 : p < 0.65 ? 2 : p < 0.88 ? 3 : 4;
     stationItems.forEach((el, idx) => {
       el.classList.toggle("active", idx === activeIndex);
     });
@@ -1010,24 +878,21 @@
     const delta = Math.min(clock.getDelta(), 0.1);
     const elapsed = clock.getElapsedTime();
 
-    // Smooth physics lerp
     currentProgress += (targetProgress - currentProgress) * 0.08;
     updateTrackRailUI(currentProgress);
 
-    // Frame on path
     const { pos, tan, side } = getFrameAt(currentProgress);
 
     // Position Ball directly on road
     const ballPos = pos.clone().addScaledVector(UP, BALL_RADIUS + 0.11);
     ballGroup.position.copy(ballPos);
 
-    // Real rolling spin rotation proportional to movement
+    // Ball rolling rotation
     const rollSpeed = Math.abs(targetProgress - currentProgress) * 45;
     innerSpinGroup.rotation.x += (rollSpeed + 0.3) * delta * 5;
     innerSpinGroup.rotation.z += delta * 1.5;
 
-    // Dynamic 3D Animations:
-    // 1. Pulsing & spinning Golden Heart
+    // Pulsing & spinning 3D Golden Heart
     if (animatedObjects.heart) {
       animatedObjects.heart.rotation.y += delta * 0.7;
       animatedObjects.heart.position.y = animatedObjects.heartBaseY + Math.sin(elapsed * 2.5) * 0.12;
@@ -1035,15 +900,8 @@
       animatedObjects.heart.scale.set(pulse, pulse, pulse);
     }
 
-    // 2. Floating musical notes bobbing
-    animatedObjects.notes.forEach((note, i) => {
-      note.rotation.y += delta * (0.8 + i * 0.15);
-      note.position.y = note.baseY + Math.sin(elapsed * 2.2 + i * 1.5) * 0.18;
-    });
-
-    // Camera follow mechanics (Tinkeroll ride style)
+    // Camera follow mechanics
     if (!window.__isEnvelopeOpened) {
-      // Prior to opening: wide overview facing card spawn
       const introCamPos = new THREE.Vector3(0, 3.5, 12);
       const introCamLook = new THREE.Vector3(0, 0, 5);
       if (isFirstFrame) {
@@ -1055,7 +913,6 @@
         currentCamLook.lerp(introCamLook, 0.08);
       }
     } else {
-      // Active Ride: Dynamic Follow Camera right behind the marble
       const camBack = isSmall ? 5.2 : 4.4;
       const camUp = isSmall ? 3.2 : 2.5;
       const sideSwing = Math.sin(currentProgress * 6) * 0.8;
@@ -1076,15 +933,12 @@
     camera.position.copy(currentCamPos);
     camera.lookAt(currentCamLook);
 
-    // Sun follows the marble
     sunLight.position.copy(ballPos).add(new THREE.Vector3(12, 28, 16));
     sunLight.target.position.copy(ballPos);
 
-    // Subtle responsive tilt
     worldGroup.rotation.z += (-pointer.x * 0.02 - worldGroup.rotation.z) * 0.05;
     worldGroup.rotation.x += (pointer.y * 0.015 - worldGroup.rotation.x) * 0.05;
 
-    // Float orbs
     orbs.forEach((item, idx) => {
       item.mesh.position.y = item.basePos.y + Math.sin(elapsed * item.speed + idx) * 0.25;
     });

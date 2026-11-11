@@ -12,7 +12,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=3.0">
+  <link rel="stylesheet" href="css/style.css?v=3.2">
 </head>
 <body>
 
@@ -89,11 +89,10 @@
     </div>
     <div class="track-stations">
       <span class="track-station-item active" onclick="jumpToStation(0.02)">Старт</span>
-      <span class="track-station-item" onclick="jumpToStation(0.20)">Привітання</span>
-      <span class="track-station-item" onclick="jumpToStation(0.40)">Календар</span>
-      <span class="track-station-item" onclick="jumpToStation(0.60)">Ресторан</span>
-      <span class="track-station-item" onclick="jumpToStation(0.80)">Програма</span>
-      <span class="track-station-item" onclick="jumpToStation(0.94)">Зустріч</span>
+      <span class="track-station-item" onclick="jumpToStation(0.25)">Привітання</span>
+      <span class="track-station-item" onclick="jumpToStation(0.52)">Календар</span>
+      <span class="track-station-item" onclick="jumpToStation(0.76)">Ресторан</span>
+      <span class="track-station-item" onclick="jumpToStation(0.96)">Зустріч</span>
     </div>
   </aside>
 
@@ -103,7 +102,7 @@
   <main id="scroll-container">
 
     <!-- Station 1: Greeting -->
-    <section class="s-station align-left" data-t="0.20">
+    <section class="s-station align-left" data-t="0.25">
       <div class="station-copy-card">
         <span class="station-eyebrow">✨ Початок свята</span>
         <h2 class="station-heading">Запрошую Вас на святкування!</h2>
@@ -111,13 +110,13 @@
           «Є особливі моменти, які хочеться розділити з найдорожчими людьми!»
         </div>
         <p class="station-body">
-          Буду щиро рада бачити Вас серед гостей на святкуванні мого ювілею, яке відбудеться у теплій та святковій атмосфері ресторану.
+          Буду щиро рада бачити Вас серед гостей на святкуванні мого ювілею, яке відбудеться у теплій та святковій атмосфері.
         </p>
       </div>
     </section>
 
     <!-- Station 2: Calendar & Live Timer -->
-    <section class="s-station align-right" data-t="0.40">
+    <section class="s-station align-right" data-t="0.52">
       <div class="station-copy-card">
         <span class="station-eyebrow">📅 Дата свята</span>
         <h2 class="station-heading">17 листопада 2026</h2>
@@ -148,10 +147,10 @@
       </div>
     </section>
 
-    <!-- Station 3: Restaurant Location & Menu -->
-    <section class="s-station align-left" data-t="0.60">
+    <!-- Station 3: Restaurant Location (Menu removed) -->
+    <section class="s-station align-left" data-t="0.76">
       <div class="station-copy-card">
-        <span class="station-eyebrow">📍 Локація & Стіл</span>
+        <span class="station-eyebrow">📍 Локація свята</span>
         <h2 class="station-heading">Ресторан «Австрійський двір»</h2>
         
         <div class="rest-highlight">
@@ -159,12 +158,9 @@
           <div class="rest-sub">селище Куликів, вул. Шевченка, 69а</div>
         </div>
 
-        <p class="station-body">Святкове меню та вишукані напої:</p>
-        <div class="menu-list-embed">
-          <div class="menu-row"><span>🥂 Welcome Drink & сирне плато</span><span>Закуски</span></div>
-          <div class="menu-row"><span>🍖 Каре телятини та австрійський шніцель</span><span>Гаряче</span></div>
-          <div class="menu-row"><span>🎂 Святковий ювілейний торт</span><span>Десерт</span></div>
-        </div>
+        <p class="station-body">
+          Святкування відбудеться у вишуканій атмосфері затишного ресторану з чарівною музикою та теплим колом найрідніших людей.
+        </p>
 
         <a href="https://maps.app.goo.gl/avstriiskyi-dvir" target="_blank" rel="noopener" class="card-action-btn">
           Відкрити ресторан на мапі &rarr;
@@ -172,23 +168,8 @@
       </div>
     </section>
 
-    <!-- Station 4: Program of the Day -->
-    <section class="s-station align-right" data-t="0.80">
-      <div class="station-copy-card">
-        <span class="station-eyebrow">🕒 Розклад свята</span>
-        <h2 class="station-heading">Програма дня</h2>
-        
-        <div class="timeline-flow">
-          <div class="tl-item"><span class="tl-badge">16:00</span><span class="tl-info">Зустріч гостей, welcome drink та обійми</span></div>
-          <div class="tl-item"><span class="tl-badge">16:30</span><span class="tl-info">Святковий банкет, тости та вітання</span></div>
-          <div class="tl-item"><span class="tl-badge">18:00</span><span class="tl-info">Жива музика, танці, фотосесія та розваги</span></div>
-          <div class="tl-item"><span class="tl-badge">21:00</span><span class="tl-info">Ювілейний торт і тепле спілкування</span></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Station 5: Final Heart & RSVP -->
-    <section class="s-station align-left" data-t="0.94">
+    <!-- Station 4: Final Heart & RSVP -->
+    <section class="s-station align-right" data-t="0.96">
       <div class="station-copy-card">
         <span class="station-eyebrow">💌 Чекаю на Вас!</span>
         <h2 class="station-heading">До зустрічі на святі!</h2>
@@ -218,8 +199,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
   <!-- World & Application Scripts -->
-  <script src="js/world.js?v=3.0"></script>
-  <script src="js/main.js?v=3.0"></script>
+  <script src="js/world.js?v=3.2"></script>
+  <script src="js/main.js?v=3.2"></script>
 
 </body>
 </html>
