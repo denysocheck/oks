@@ -14,7 +14,7 @@
   // Scene, Camera, Renderer
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xf5efe6); // warm crema
-  scene.fog = new THREE.Fog(0xf5efe6, 18, 90);
+  scene.fog = new THREE.Fog(0xf5efe6, 18, 95);
 
   const camera = new THREE.PerspectiveCamera(
     isSmall ? 52 : 40,
@@ -201,30 +201,49 @@
   // --------------------------------------------------------------------------
   // HELPER: CREATE HIGH-RES TEXTURED 3D SIGNBOARDS MOUNTED DIRECTLY BY THE ROAD
   // --------------------------------------------------------------------------
+  function drawSafeRoundRect(ctx, x, y, width, height, radius) {
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, width, height, radius);
+      ctx.closePath();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+  }
+
   function createRoadsideBillboard(width, height, drawCallback) {
     const canvas = document.createElement("canvas");
     canvas.width = 1024;
     canvas.height = Math.round(1024 * (height / width));
     const ctx = canvas.getContext("2d");
 
-    // Rounded rectangle background card
+    // Rounded rectangle card background
     const r = 36;
     ctx.fillStyle = "#ffffff";
     ctx.shadowColor = "rgba(138, 126, 112, 0.25)";
     ctx.shadowBlur = 28;
     ctx.shadowOffsetY = 14;
 
-    ctx.beginPath();
-    ctx.roundRect(24, 24, canvas.width - 48, canvas.height - 48, r);
+    drawSafeRoundRect(ctx, 24, 24, canvas.width - 48, canvas.height - 48, r);
     ctx.fill();
 
     // Inner gold border
     ctx.shadowColor = "transparent";
-    ctx.strokeStyle = "rgba(200, 168, 124, 0.4)";
+    ctx.strokeStyle = "rgba(200, 168, 124, 0.45)";
     ctx.lineWidth = 4;
     ctx.stroke();
 
-    // Execute custom drawing logic
+    // Draw station content
     drawCallback(ctx, canvas.width, canvas.height);
 
     const texture = new THREE.CanvasTexture(canvas);
@@ -342,7 +361,7 @@
       ctx.font = "bold 26px 'Cormorant Garamond', serif";
       ctx.fillText("ЛИСТОПАД 2026", w / 2, 290);
 
-      // Highlighted 17th with heart badge
+      // Highlighted 17th with circle
       ctx.fillStyle = "#c8a87c";
       ctx.beginPath();
       ctx.arc(w / 2, 380, 48, 0, Math.PI * 2);
@@ -371,7 +390,6 @@
     rotunda.receiveShadow = true;
     g.add(rotunda);
 
-    // Columns & golden ring
     for (let a = 0; a < Math.PI * 2; a += Math.PI / 2) {
       const col = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 2.2, 16), matPillars);
       col.position.set(rotunda.position.x + Math.cos(a) * 1.4, rotunda.position.y + 1.1, rotunda.position.z + Math.sin(a) * 1.4);
@@ -405,7 +423,6 @@
       ctx.font = "italic 32px 'Cormorant Garamond', serif";
       ctx.fillText("селище Куликів, вул. Шевченка, 69а", w / 2, 220);
 
-      // Decorative divider
       ctx.strokeStyle = "#c8a87c";
       ctx.lineWidth = 2;
       ctx.beginPath();
@@ -413,7 +430,6 @@
       ctx.lineTo(w / 2 + 140, 250);
       ctx.stroke();
 
-      // Menu Highlights
       ctx.textAlign = "left";
       ctx.fillStyle = "#2a2521";
       ctx.font = "bold 28px 'Cormorant Garamond', serif";
@@ -446,7 +462,6 @@
     tableLeg.position.y = 0.5;
     tableGroup.add(tableLeg);
 
-    // Crystal glasses
     [-0.35, 0.35].forEach((gx) => {
       const glass = new THREE.Mesh(
         new THREE.CylinderGeometry(0.08, 0.02, 0.35, 12),
@@ -484,7 +499,6 @@
       ctx.lineTo(w / 2 + 120, 195);
       ctx.stroke();
 
-      // Timeline Schedule
       ctx.textAlign = "left";
       const schedule = [
         { time: "16:00", desc: "Зустріч гостей, welcome drink та обійми" },
@@ -544,7 +558,6 @@
       ctx.fillText("Приходьте розділити зі мною радість цього", w / 2, 270);
       ctx.fillText("особливого дня, гарний настрій та незабутні миті!", w / 2, 320);
 
-      // Heart icon
       ctx.fillStyle = "#c8a87c";
       ctx.font = "46px sans-serif";
       ctx.fillText("❤️", w / 2, 400);
@@ -593,21 +606,42 @@
   let targetProgress = 0;
   let currentProgress = 0;
 
+  // Direct wheel & touch progress accumulator (ensures rolling even if standard page scroll is sluggish)
+  window.addEventListener("wheel", (e) => {
+    if (!window.__isEnvelopeOpened) return;
+    const delta = e.deltaY * 0.00035;
+    targetProgress = Math.max(0, Math.min(1, targetProgress + delta));
+  }, { passive: true });
+
+  let touchLastY = 0;
+  window.addEventListener("touchstart", (e) => {
+    touchLastY = e.touches[0].clientY;
+  }, { passive: true });
+
+  window.addEventListener("touchmove", (e) => {
+    if (!window.__isEnvelopeOpened) return;
+    const deltaY = touchLastY - e.touches[0].clientY;
+    touchLastY = e.touches[0].clientY;
+    targetProgress = Math.max(0, Math.min(1, targetProgress + deltaY * 0.0008));
+  }, { passive: true });
+
+  // Native window scroll progress
+  function updateScroll() {
+    const scrollH = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollH > 0) {
+      const p = Math.min(1, Math.max(0, window.scrollY / scrollH));
+      targetProgress = Math.max(targetProgress, p);
+    }
+  }
+  window.addEventListener("scroll", updateScroll, { passive: true });
+  updateScroll();
+
   // Mouse tilt pointer
   const pointer = { x: 0, y: 0 };
   window.addEventListener("pointermove", (e) => {
     pointer.x = (e.clientX / window.innerWidth) * 2 - 1;
     pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
   }, { passive: true });
-
-  function updateScroll() {
-    const scrollH = document.documentElement.scrollHeight - window.innerHeight;
-    if (scrollH > 0) {
-      targetProgress = Math.min(1, Math.max(0, window.scrollY / scrollH));
-    }
-  }
-  window.addEventListener("scroll", updateScroll, { passive: true });
-  updateScroll();
 
   // Progress rail updates
   const trackFill = document.querySelector(".track-fill");
@@ -631,11 +665,10 @@
 
   const clock = new THREE.Clock();
 
-  // Initial envelope state
-  let isEnvelopeOpened = false;
+  window.__isEnvelopeOpened = false;
 
   window.notifyEnvelopeOpened = function () {
-    isEnvelopeOpened = true;
+    window.__isEnvelopeOpened = true;
   };
 
   // --------------------------------------------------------------------------
@@ -658,13 +691,13 @@
     const ballPos = pos.clone().addScaledVector(UP, BALL_RADIUS + 0.11);
     ballGroup.position.copy(ballPos);
 
-    // Real rolling spin rotation proportional to progress delta
-    const rollSpeed = (targetProgress - currentProgress) * 45;
-    innerSpinGroup.rotation.x += (rollSpeed + 0.5) * delta * 5;
+    // Real rolling spin rotation proportional to movement
+    const rollSpeed = Math.abs(targetProgress - currentProgress) * 45;
+    innerSpinGroup.rotation.x += (rollSpeed + 0.3) * delta * 5;
     innerSpinGroup.rotation.z += delta * 1.5;
 
     // Camera follow mechanics (Tinkeroll ride style)
-    if (!isEnvelopeOpened) {
+    if (!window.__isEnvelopeOpened) {
       // Prior to opening: wide overview facing card spawn
       const introCamPos = new THREE.Vector3(0, 3.5, 12);
       const introCamLook = new THREE.Vector3(0, 0, 5);
@@ -728,11 +761,14 @@
 
   // Jump to Station
   window.jumpToStation = function (percent) {
+    targetProgress = percent;
     const scrollH = document.documentElement.scrollHeight - window.innerHeight;
-    window.scrollTo({
-      top: scrollH * percent,
-      behavior: "smooth"
-    });
+    if (scrollH > 0) {
+      window.scrollTo({
+        top: scrollH * percent,
+        behavior: "smooth"
+      });
+    }
   };
 
 })();

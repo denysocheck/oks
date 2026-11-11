@@ -68,7 +68,7 @@
       if (envelopeStage) envelopeStage.classList.add("opened");
       document.body.classList.add("world-active");
       window.scrollTo(0, 0);
-    }, 1600);
+    }, 1400);
   }
 
   if (envelopeStage) {
@@ -82,13 +82,13 @@
   }, { passive: true });
 
   window.addEventListener("touchmove", (e) => {
-    if (!isEnvelopeOpened && Math.abs(e.touches[0].clientY - touchStartY) > 30) {
+    if (!isEnvelopeOpened && Math.abs(e.touches[0].clientY - touchStartY) > 25) {
       openEnvelope();
     }
   }, { passive: true });
 
   window.addEventListener("wheel", (e) => {
-    if (!isEnvelopeOpened && Math.abs(e.deltaY) > 15) {
+    if (!isEnvelopeOpened && Math.abs(e.deltaY) > 10) {
       openEnvelope();
     }
   }, { passive: true });

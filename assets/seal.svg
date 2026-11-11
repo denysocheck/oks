@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <radialGradient id="waxGrad" cx="35%" cy="32%" r="65%">
+      <stop offset="0%" stop-color="#fdf1d8"/>
+      <stop offset="35%" stop-color="#dfbe8c"/>
+      <stop offset="70%" stop-color="#bd9559"/>
+      <stop offset="100%" stop-color="#8a6735"/>
+    </radialGradient>
+    <radialGradient id="innerGrad" cx="38%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#ebd0a3"/>
+      <stop offset="60%" stop-color="#b68e54"/>
+      <stop offset="100%" stop-color="#8a6735"/>
+    </radialGradient>
+    <filter id="sealShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#4a3518" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <!-- Outer irregular wax rim -->
+  <path d="M50 4 C64 3, 76 10, 85 19 C94 28, 98 42, 96 56 C94 69, 87 81, 76 89 C65 97, 50 97, 36 94 C23 91, 12 82, 6 70 C0 58, 2 43, 8 31 C14 19, 25 9, 39 5 Z" fill="url(#waxGrad)" filter="url(#sealShadow)"/>
+  <!-- Inner stamped circle -->
+  <circle cx="50" cy="50" r="34" fill="url(#innerGrad)" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+  <circle cx="50" cy="50" r="30" fill="none" stroke="rgba(110,80,40,0.35)" stroke-width="1" stroke-dasharray="2,3"/>
+  <!-- Botanical Monogram branch / Jubilee ornament -->
+  <g fill="none" stroke="#fef8ec" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <path d="M50 68 V32"/>
+    <path d="M50 48 Q42 42 38 46 Q44 54 50 50"/>
+    <path d="M50 48 Q58 42 62 46 Q56 54 50 50"/>
+    <path d="M50 38 Q44 32 40 35 Q44 42 50 40"/>
+    <path d="M50 38 Q56 32 60 35 Q56 42 50 40"/>
+    <circle cx="50" cy="28" r="3" fill="#fef8ec"/>
+  </g>
+</svg>
