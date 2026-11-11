@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="envBodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f5ede2"/>
+      <stop offset="100%" stop-color="#e3d4c1"/>
+    </linearGradient>
+    <linearGradient id="pocketGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+      <stop offset="0%" stop-color="#ddcebb"/>
+      <stop offset="100%" stop-color="#ebdfcf"/>
+    </linearGradient>
+    <filter id="pocketShadow">
+      <feDropShadow dx="0" dy="-4" stdDeviation="6" flood-color="#806b52" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <!-- Back base -->
+  <rect x="0" y="0" width="500" height="320" rx="16" fill="url(#envBodyGrad)"/>
+  <!-- Pocket: bottom triangle + side triangles combined -->
+  <path d="M0,320 L0,120 L250,210 L500,120 L500,320 Z" fill="url(#pocketGrad)" filter="url(#pocketShadow)"/>
+</svg>

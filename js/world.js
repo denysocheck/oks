@@ -606,13 +606,27 @@
   let targetProgress = 0;
   let currentProgress = 0;
 
-  // Direct wheel & touch progress accumulator (ensures rolling even if standard page scroll is sluggish)
+  // Primary driver: native page scroll maps 1:1 to progress
+  function syncScrollToProgress() {
+    const scrollH = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollH > 0) {
+      targetProgress = Math.min(1, Math.max(0, window.scrollY / scrollH));
+    }
+  }
+  window.addEventListener("scroll", syncScrollToProgress, { passive: true });
+
+  // Fallback wheel driver (in case native scroll isn't enough, e.g. before body is tall enough)
   window.addEventListener("wheel", (e) => {
     if (!window.__isEnvelopeOpened) return;
-    const delta = e.deltaY * 0.00035;
-    targetProgress = Math.max(0, Math.min(1, targetProgress + delta));
+    // Only use direct wheel if page scroll height is negligible
+    const scrollH = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollH < 100) {
+      const delta = e.deltaY * 0.00035;
+      targetProgress = Math.max(0, Math.min(1, targetProgress + delta));
+    }
   }, { passive: true });
 
+  // Touch fallback for same scenario
   let touchLastY = 0;
   window.addEventListener("touchstart", (e) => {
     touchLastY = e.touches[0].clientY;
@@ -620,21 +634,13 @@
 
   window.addEventListener("touchmove", (e) => {
     if (!window.__isEnvelopeOpened) return;
-    const deltaY = touchLastY - e.touches[0].clientY;
-    touchLastY = e.touches[0].clientY;
-    targetProgress = Math.max(0, Math.min(1, targetProgress + deltaY * 0.0008));
-  }, { passive: true });
-
-  // Native window scroll progress
-  function updateScroll() {
     const scrollH = document.documentElement.scrollHeight - window.innerHeight;
-    if (scrollH > 0) {
-      const p = Math.min(1, Math.max(0, window.scrollY / scrollH));
-      targetProgress = Math.max(targetProgress, p);
+    if (scrollH < 100) {
+      const deltaY = touchLastY - e.touches[0].clientY;
+      touchLastY = e.touches[0].clientY;
+      targetProgress = Math.max(0, Math.min(1, targetProgress + deltaY * 0.0008));
     }
-  }
-  window.addEventListener("scroll", updateScroll, { passive: true });
-  updateScroll();
+  }, { passive: true });
 
   // Mouse tilt pointer
   const pointer = { x: 0, y: 0 };

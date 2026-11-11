@@ -1,5 +1,5 @@
 // ==========================================================================
-// MAIN.JS - INTERACTION, ENVELOPE OPENING, & AUDIO
+// MAIN.JS - INTERACTION, ENVELOPE, AUDIO, COUNTDOWN, CARD REVEAL
 // ==========================================================================
 
 (function () {
@@ -40,6 +40,41 @@
   if (musicToggle) {
     musicToggle.addEventListener("click", toggleMusic);
   }
+
+  // --------------------------------------------------------------------------
+  // COUNTDOWN TIMER
+  // --------------------------------------------------------------------------
+  const targetDate = new Date("2026-11-17T16:00:00+02:00");
+  const cdDays = document.getElementById("cdDays");
+  const cdHours = document.getElementById("cdHours");
+  const cdMinutes = document.getElementById("cdMinutes");
+  const cdSeconds = document.getElementById("cdSeconds");
+
+  function updateCountdown() {
+    const now = new Date();
+    const diff = targetDate - now;
+
+    if (diff <= 0) {
+      if (cdDays) cdDays.textContent = "0";
+      if (cdHours) cdHours.textContent = "0";
+      if (cdMinutes) cdMinutes.textContent = "0";
+      if (cdSeconds) cdSeconds.textContent = "0";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    if (cdDays) cdDays.textContent = days;
+    if (cdHours) cdHours.textContent = hours;
+    if (cdMinutes) cdMinutes.textContent = minutes;
+    if (cdSeconds) cdSeconds.textContent = seconds;
+  }
+
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
 
   // --------------------------------------------------------------------------
   // 3D ENVELOPE OPENING & DESCENT ONTO TRACK
@@ -92,5 +127,28 @@
       openEnvelope();
     }
   }, { passive: true });
+
+  // --------------------------------------------------------------------------
+  // STATION CARD REVEAL ON SCROLL (IntersectionObserver)
+  // --------------------------------------------------------------------------
+  const stationCards = document.querySelectorAll(".station-copy-card");
+
+  if ("IntersectionObserver" in window) {
+    const cardObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+    );
+
+    stationCards.forEach((card) => cardObserver.observe(card));
+  } else {
+    // Fallback: just show all
+    stationCards.forEach((card) => card.classList.add("visible"));
+  }
 
 })();

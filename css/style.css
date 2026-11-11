@@ -1,32 +1,31 @@
 /* ==========================================================================
-   STYLE.CSS - 3D TINKEROLL-STYLE JUBILEE EXPERIENCE (FIXED SCROLL & ENVELOPE)
-   Strict Palette: Crema, Champagne, Rose-Gold, Warm Gold, Ivory, Rich Espresso
+   STYLE.CSS - 3D TINKEROLL-STYLE JUBILEE EXPERIENCE (PRODUCTION)
+   Palette: Crema, Champagne, Rose-Gold, Warm Gold, Ivory, Espresso
    ========================================================================== */
 
 :root {
+  --color-warm-bg: #faf7f2;
+  --color-champagne: #f5efe6;
+  --color-envelope: #e5d8c7;
+  --color-gold: #c8a87c;
+  --color-gold-dark: #9e7d52;
+  --color-gold-light: #d4b78f;
+  --color-rose-deep: #a67c5b;
   --font-script: 'Great Vibes', cursive;
   --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-sans: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
-
-  /* Theme Palette */
-  --color-cream: #faf7f2;
-  --color-warm-bg: #f5efe6;
-  --color-gold: #c8a87c;
-  --color-gold-light: #dfc8a5;
-  --color-gold-dark: #9e7d52;
-  --color-rose: #b5a898;
-  --color-rose-deep: #8a7e70;
+  --font-display: 'Playfair Display', serif;
+  --font-sans: 'Montserrat', Arial, sans-serif;
   --color-text: #2a2521;
   --color-text-soft: #554d45;
   --color-text-muted: #8b8075;
-  --color-card-border: rgba(200, 168, 124, 0.35);
+  --color-card-border: rgba(200, 168, 124, 0.4);
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
@@ -51,7 +50,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Fixed 3D WebGL Canvas */
+/* Fixed 3D WebGL Canvas behind the entire experience */
 #webgl-canvas {
   position: fixed;
   inset: 0;
@@ -60,16 +59,6 @@ body {
   z-index: 1;
   display: block;
   pointer-events: none;
-}
-
-/* Virtual Scroll Container providing actual scroll height (900vh) */
-#scroll-container {
-  position: relative;
-  width: 100%;
-  height: 900vh;
-  pointer-events: none;
-  z-index: 2;
-  display: block;
 }
 
 /* ==========================================================================
@@ -86,7 +75,7 @@ body {
   background: radial-gradient(circle at center, #fdfaf6 0%, #f4ece2 60%, #e8dcce 100%);
   perspective: 1200px;
   cursor: pointer;
-  transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1), visibility 1s;
+  transition: opacity 0.9s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.9s;
   overflow: hidden;
   touch-action: manipulation;
 }
@@ -107,6 +96,7 @@ body {
   position: absolute;
   border-radius: 50%;
   background: var(--color-gold);
+  opacity: 0.5;
   box-shadow: 0 0 12px var(--color-gold-light);
   animation: sparkleTwinkle 3s ease-in-out infinite alternate;
 }
@@ -119,8 +109,8 @@ body {
 /* 3D Envelope Wrapper */
 .envelope-3d-wrap {
   position: relative;
-  width: min(520px, calc(100vw - 40px));
-  height: min(340px, calc((100vw - 40px) * 0.65));
+  width: min(520px, calc(100vw - 36px));
+  height: min(340px, calc((100vw - 36px) * 0.65));
   perspective: 1400px;
   transform-style: preserve-3d;
   transition: transform 0.4s ease-out;
@@ -136,21 +126,21 @@ body {
   height: 100%;
   transform-style: preserve-3d;
   background: linear-gradient(145deg, #f0e7db, #e5d8c7);
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: 0 25px 60px rgba(120, 100, 80, 0.25), 0 5px 15px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.85);
-  overflow: hidden; /* cleanly keeps inside card inside the envelope until open */
+  overflow: hidden; /* critical: hides card peeking through */
 }
 
-/* Inside card */
+/* Card inside the envelope */
 .envelope-card {
   position: absolute;
-  top: 10%;
+  top: 8%;
   left: 6%;
   width: 88%;
-  height: 80%;
+  height: 84%;
   background: #ffffff;
-  border-radius: 10px;
+  border-radius: 12px;
   z-index: 1;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--color-card-border);
@@ -159,7 +149,7 @@ body {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 20px;
+  padding: 24px;
   transform: translateY(0);
   transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s;
 }
@@ -195,14 +185,26 @@ body {
   margin-top: 6px;
 }
 
-/* Top Folding Flap */
+/* Envelope Front Pocket: V-shape covering lower part of card */
+.envelope-pocket-front {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(160deg, #ede4d6, #ded0be);
+  clip-path: polygon(0% 0%, 50% 50%, 100% 0%, 100% 100%, 0% 100%);
+  border-radius: 18px;
+  box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.6);
+}
+
+/* Envelope Top Flap */
 .envelope-flap {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 56%;
-  background: linear-gradient(180deg, #e3d5c4, #d6c5b0);
+  height: 54%;
+  background: linear-gradient(180deg, #e4d7c6, #d7c7b3);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top center;
   transform-style: preserve-3d;
@@ -211,14 +213,14 @@ body {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
-/* Wax Seal with clean rounded SVG */
+/* Wax Seal */
 .wax-seal {
   position: absolute;
-  top: 48%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 72px;
-  height: 72px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   z-index: 5;
   background: transparent;
@@ -237,10 +239,10 @@ body {
   display: block;
 }
 
-/* Open Animation */
+/* Open Animation Sequence */
 .envelope-box.anim-open {
-  overflow: visible; /* allows card to slide cleanly out of the envelope */
-  animation: envZoomDisappear 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 1s forwards;
+  overflow: visible; /* allows card to slide out */
+  animation: envZoomDisappear 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) 0.9s forwards;
 }
 
 .envelope-box.anim-open .envelope-flap {
@@ -254,17 +256,24 @@ body {
 }
 
 .envelope-box.anim-open .envelope-card {
-  transform: translateY(-80px) scale(1.05);
+  transform: translateY(-90px) scale(1.05);
+}
+
+.envelope-box.anim-open .envelope-pocket-front {
+  opacity: 0;
+  transition: opacity 0.4s ease 0.1s;
 }
 
 @keyframes envZoomDisappear {
   0% { transform: scale(1); opacity: 1; }
-  100% { transform: scale(1.7) translateY(60px); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(2.5) translateY(-30%); opacity: 0; }
 }
 
-/* Hint */
+/* Animated Hint */
 .env-hint {
-  margin-top: 36px;
+  position: absolute;
+  bottom: max(40px, env(safe-area-inset-bottom, 20px));
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -293,9 +302,9 @@ body {
    ========================================================================== */
 .hud-nav {
   position: fixed;
-  top: 24px;
-  left: 24px;
-  right: 24px;
+  top: 20px;
+  left: 20px;
+  right: 20px;
   z-index: 50;
   display: flex;
   justify-content: space-between;
@@ -319,34 +328,32 @@ body.world-active .hud-nav {
 .hud-scroll-hint {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   font-family: var(--font-serif);
-  font-size: 14px;
   font-style: italic;
-  letter-spacing: 0.08em;
+  font-size: 14px;
   color: var(--color-text-muted);
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(253, 250, 246, 0.8);
   backdrop-filter: blur(8px);
-  padding: 8px 18px;
+  padding: 8px 16px;
   border-radius: 100px;
-  border: 1px solid var(--color-card-border);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(200, 168, 124, 0.2);
 }
 
 .hud-scroll-hint .dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   background: var(--color-gold);
-  animation: pulseDot 1.5s infinite;
+  animation: pulseDot 1.5s ease-in-out infinite;
 }
 
 @keyframes pulseDot {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.6); opacity: 0.4; }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.7); }
 }
 
-/* Vertical Track Rail (like Tinkeroll) */
+/* Vertical Track Rail */
 .track-rail {
   position: fixed;
   right: 28px;
@@ -423,6 +430,288 @@ body.world-active .track-rail {
   transform: translateX(4px);
 }
 
+/* ==========================================================================
+   SCROLL CONTENT SECTIONS & EDITORIAL CARDS (Tinkeroll Layout)
+   HTML cards scroll in foreground, 3D scene scrolls behind
+   ========================================================================== */
+#scroll-container {
+  position: relative;
+  width: 100%;
+  z-index: 10;
+  /* pointer-events pass through to 3D, but cards re-enable them */
+  pointer-events: none;
+}
+
+.s-station {
+  position: relative;
+  min-height: 160vh;
+  display: flex;
+  align-items: center;
+  padding: 0 max(20px, 6vw);
+}
+
+/* First station needs extra top padding so it's not immediately visible */
+.s-station:first-child {
+  padding-top: 30vh;
+}
+
+.s-station.align-left {
+  justify-content: flex-start;
+}
+
+.s-station.align-right {
+  justify-content: flex-end;
+}
+
+/* Editorial Glass Card */
+.station-copy-card {
+  position: relative;
+  width: min(500px, 100%);
+  padding: clamp(26px, 4.5vw, 38px);
+  border-radius: 26px;
+  background: rgba(253, 250, 246, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid var(--color-card-border);
+  box-shadow: 0 30px 70px rgba(70, 55, 40, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  pointer-events: auto;
+  transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.6s ease;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.station-copy-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.station-copy-card:hover {
+  box-shadow: 0 36px 85px rgba(70, 55, 40, 0.22);
+}
+
+.station-eyebrow {
+  display: block;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold-dark);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.station-heading {
+  font-family: var(--font-script);
+  font-size: clamp(32px, 6vw, 52px);
+  line-height: 1.12;
+  color: var(--color-text);
+  margin-bottom: 16px;
+}
+
+.station-quote {
+  font-family: var(--font-serif);
+  font-size: clamp(17px, 2.5vw, 21px);
+  font-style: italic;
+  color: var(--color-rose-deep);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.station-body {
+  font-family: var(--font-serif);
+  font-size: clamp(15px, 2.3vw, 18px);
+  font-style: italic;
+  color: var(--color-text-soft);
+  line-height: 1.7;
+}
+
+/* Calendar Card Features */
+.cal-grid-embed {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  margin: 18px 0;
+  border: 1px solid rgba(200, 168, 124, 0.25);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.cal-month-title {
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-style: italic;
+  color: var(--color-gold-dark);
+  margin-bottom: 10px;
+}
+
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 13px;
+}
+
+.cal-dh {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  padding-bottom: 4px;
+  font-family: var(--font-sans);
+}
+
+.cal-d {
+  padding: 5px 0;
+  border-radius: 50%;
+  color: var(--color-text-soft);
+}
+
+.cal-d.active-d {
+  background: linear-gradient(135deg, var(--color-gold), var(--color-gold-dark));
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(200, 168, 124, 0.5);
+  transform: scale(1.15);
+}
+
+/* Live Timer Grid */
+.countdown-strip {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 14px;
+}
+
+.cd-box {
+  background: rgba(200, 168, 124, 0.12);
+  border-radius: 12px;
+  padding: 8px 12px;
+  min-width: 62px;
+  text-align: center;
+}
+
+.cd-val {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--color-text);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.cd-lbl {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-top: 3px;
+}
+
+/* Restaurant Address & Menu */
+.rest-highlight {
+  background: rgba(200, 168, 124, 0.14);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin: 16px 0;
+}
+
+.rest-title {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-gold-dark);
+}
+
+.rest-sub {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--color-text-soft);
+  margin-top: 2px;
+}
+
+.menu-list-embed {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.menu-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed rgba(200, 168, 124, 0.3);
+  padding-bottom: 4px;
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-style: italic;
+}
+
+.menu-row span:first-child {
+  color: var(--color-text);
+}
+
+.menu-row span:last-child {
+  color: var(--color-gold-dark);
+}
+
+/* Program Timeline */
+.timeline-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.tl-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  background: #ffffff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(200, 168, 124, 0.2);
+}
+
+.tl-badge {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-gold-dark);
+  min-width: 54px;
+}
+
+.tl-info {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--color-text-soft);
+}
+
+/* Action Link Buttons */
+.card-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  border-radius: 100px;
+  background: var(--color-gold);
+  color: #fff;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
+  box-shadow: 0 4px 14px rgba(160, 125, 80, 0.25);
+  margin-top: 14px;
+}
+
+.card-action-btn:hover {
+  transform: translateY(-2px);
+  background: var(--color-gold-dark);
+}
+
 /* Floating Music Control */
 .music-toggle {
   position: fixed;
@@ -462,11 +751,89 @@ body.world-active .track-rail {
   color: var(--color-gold-dark);
 }
 
+/* ==========================================================================
+   MOBILE RESPONSIVE
+   ========================================================================== */
 @media (max-width: 768px) {
+  .s-station {
+    justify-content: center !important;
+    padding: 0 14px;
+    min-height: 120vh;
+  }
+  .s-station:first-child {
+    padding-top: 20vh;
+  }
+  .station-copy-card {
+    padding: 22px 18px;
+    border-radius: 20px;
+    width: 100%;
+  }
+  .station-heading {
+    font-size: clamp(28px, 7vw, 40px);
+  }
+  .station-quote {
+    font-size: clamp(15px, 3.5vw, 18px);
+  }
+  .station-body {
+    font-size: clamp(14px, 3.2vw, 16px);
+  }
   .track-rail {
     display: none;
   }
   .hud-brand {
     font-size: 24px;
+  }
+  .hud-scroll-hint {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+  .tl-item {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+    padding: 10px 12px;
+  }
+  .tl-badge {
+    font-size: 17px;
+  }
+  .tl-info {
+    font-size: 14px;
+  }
+  .menu-row {
+    font-size: 13px;
+  }
+  .cd-box {
+    min-width: 52px;
+    padding: 6px 8px;
+  }
+  .cd-val {
+    font-size: 18px;
+  }
+  .envelope-3d-wrap {
+    width: min(420px, calc(100vw - 32px));
+    height: min(275px, calc((100vw - 32px) * 0.65));
+  }
+  .wax-seal {
+    width: 60px;
+    height: 60px;
+  }
+  .card-title {
+    font-size: clamp(28px, 8vw, 42px);
+  }
+}
+
+@media (max-width: 380px) {
+  .station-copy-card {
+    padding: 18px 14px;
+  }
+  .cd-box {
+    min-width: 46px;
+    padding: 5px 6px;
+  }
+  .cd-val {
+    font-size: 16px;
+  }
+  .cd-lbl {
+    font-size: 9px;
   }
 }

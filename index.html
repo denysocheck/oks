@@ -54,6 +54,9 @@
           <h1 class="card-title">Мій Ювілей</h1>
           <p class="card-date">17 листопада 2026 • 16:00</p>
         </div>
+
+        <!-- Envelope Body Pocket Front (covers card neatly until opened) -->
+        <div class="envelope-pocket-front"></div>
       </div>
     </div>
 
@@ -93,8 +96,111 @@
     </div>
   </aside>
 
-  <!-- Virtual scroll controller providing 900vh scrollable height -->
-  <div id="scroll-container"></div>
+  <!-- ========================================================================
+       STATION CARDS GLIDING ALONG THE 3D TRACK (Tinkeroll Layout)
+       ======================================================================== -->
+  <main id="scroll-container">
+
+    <!-- Station 1: Greeting -->
+    <section class="s-station align-left" data-t="0.20">
+      <div class="station-copy-card">
+        <span class="station-eyebrow">✨ Початок свята</span>
+        <h2 class="station-heading">Запрошую Вас на святкування!</h2>
+        <div class="station-quote">
+          «Є особливі моменти, які хочеться розділити з найдорожчими людьми!»
+        </div>
+        <p class="station-body">
+          Буду щиро рада бачити Вас серед гостей на святкуванні мого ювілею, яке відбудеться у теплій та святковій атмосфері ресторану.
+        </p>
+      </div>
+    </section>
+
+    <!-- Station 2: Calendar & Live Timer -->
+    <section class="s-station align-right" data-t="0.40">
+      <div class="station-copy-card">
+        <span class="station-eyebrow">📅 Дата свята</span>
+        <h2 class="station-heading">17 листопада 2026</h2>
+        <p class="station-quote">Початок о 16:00</p>
+
+        <!-- Embedded Mini Calendar -->
+        <div class="cal-grid-embed">
+          <div class="cal-month-title">Листопад 2026</div>
+          <div class="cal-days-grid">
+            <div class="cal-dh">Пн</div><div class="cal-dh">Вт</div><div class="cal-dh">Ср</div><div class="cal-dh">Чт</div><div class="cal-dh">Пт</div><div class="cal-dh">Сб</div><div class="cal-dh">Нд</div>
+            <div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d"></div><div class="cal-d">1</div>
+            <div class="cal-d">2</div><div class="cal-d">3</div><div class="cal-d">4</div><div class="cal-d">5</div><div class="cal-d">6</div><div class="cal-d">7</div><div class="cal-d">8</div>
+            <div class="cal-d">9</div><div class="cal-d">10</div><div class="cal-d">11</div><div class="cal-d">12</div><div class="cal-d">13</div><div class="cal-d">14</div><div class="cal-d">15</div>
+            <div class="cal-d">16</div><div class="cal-d active-d" title="День свята!">17</div><div class="cal-d">18</div><div class="cal-d">19</div><div class="cal-d">20</div><div class="cal-d">21</div><div class="cal-d">22</div>
+            <div class="cal-d">23</div><div class="cal-d">24</div><div class="cal-d">25</div><div class="cal-d">26</div><div class="cal-d">27</div><div class="cal-d">28</div><div class="cal-d">29</div><div class="cal-d">30</div>
+          </div>
+        </div>
+
+        <p style="font-family:var(--font-serif); font-style:italic; font-size:14px; color:var(--color-text-muted); text-align:center;">
+          До свята залишилось:
+        </p>
+        <div class="countdown-strip">
+          <div class="cd-box"><div class="cd-val" id="cdDays">--</div><div class="cd-lbl">Днів</div></div>
+          <div class="cd-box"><div class="cd-val" id="cdHours">--</div><div class="cd-lbl">Годин</div></div>
+          <div class="cd-box"><div class="cd-val" id="cdMinutes">--</div><div class="cd-lbl">Хвилин</div></div>
+          <div class="cd-box"><div class="cd-val" id="cdSeconds">--</div><div class="cd-lbl">Секунд</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Station 3: Restaurant Location & Menu -->
+    <section class="s-station align-left" data-t="0.60">
+      <div class="station-copy-card">
+        <span class="station-eyebrow">📍 Локація & Стіл</span>
+        <h2 class="station-heading">Ресторан «Австрійський двір»</h2>
+        
+        <div class="rest-highlight">
+          <div class="rest-title">«Австрійський двір»</div>
+          <div class="rest-sub">селище Куликів, вул. Шевченка, 69а</div>
+        </div>
+
+        <p class="station-body">Святкове меню та вишукані напої:</p>
+        <div class="menu-list-embed">
+          <div class="menu-row"><span>🥂 Welcome Drink & сирне плато</span><span>Закуски</span></div>
+          <div class="menu-row"><span>🍖 Каре телятини та австрійський шніцель</span><span>Гаряче</span></div>
+          <div class="menu-row"><span>🎂 Святковий ювілейний торт</span><span>Десерт</span></div>
+        </div>
+
+        <a href="https://maps.app.goo.gl/avstriiskyi-dvir" target="_blank" rel="noopener" class="card-action-btn">
+          Відкрити ресторан на мапі &rarr;
+        </a>
+      </div>
+    </section>
+
+    <!-- Station 4: Program of the Day -->
+    <section class="s-station align-right" data-t="0.80">
+      <div class="station-copy-card">
+        <span class="station-eyebrow">🕒 Розклад свята</span>
+        <h2 class="station-heading">Програма дня</h2>
+        
+        <div class="timeline-flow">
+          <div class="tl-item"><span class="tl-badge">16:00</span><span class="tl-info">Зустріч гостей, welcome drink та обійми</span></div>
+          <div class="tl-item"><span class="tl-badge">16:30</span><span class="tl-info">Святковий банкет, тости та вітання</span></div>
+          <div class="tl-item"><span class="tl-badge">18:00</span><span class="tl-info">Жива музика, танці, фотосесія та розваги</span></div>
+          <div class="tl-item"><span class="tl-badge">21:00</span><span class="tl-info">Ювілейний торт і тепле спілкування</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Station 5: Final Heart & RSVP -->
+    <section class="s-station align-left" data-t="0.94">
+      <div class="station-copy-card">
+        <span class="station-eyebrow">💌 Чекаю на Вас!</span>
+        <h2 class="station-heading">До зустрічі на святі!</h2>
+        <div class="station-quote">
+          «Приходьте розділити зі мною радість цього особливого дня, гарний настрій, щирі усмішки та незабутні миті!»
+        </div>
+        <p class="station-body" style="text-align:center; font-size:24px; color:var(--color-gold-dark); margin-top:16px;">
+          З нетерпінням чекаю зустрічі! ❤️
+        </p>
+      </div>
+    </section>
+
+  </main>
 
   <!-- Floating Audio Control -->
   <div class="music-toggle" id="musicToggle" title="Увімкнути / вимкнути музику">
