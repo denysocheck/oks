@@ -1,6 +1,6 @@
 // ==========================================================================
-// WORLD.JS - 3D TINKEROLL-STYLE INTERACTIVE TRACK & BALL
-// Built with Three.js & GSAP
+// WORLD.JS - DIRECT 3D TRACK MOVEMENT & INTEGRATED ON-ROAD STATIONS
+// Three.js Track, Rolling Marble, Camera Follow, & Canvas Signboards
 // ==========================================================================
 
 (function () {
@@ -13,14 +13,14 @@
 
   // Scene, Camera, Renderer
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xf5efe6); // warm cream
-  scene.fog = new THREE.FogExp2(0xf5efe6, 0.015);
+  scene.background = new THREE.Color(0xf5efe6); // warm crema
+  scene.fog = new THREE.Fog(0xf5efe6, 18, 90);
 
   const camera = new THREE.PerspectiveCamera(
-    isSmall ? 55 : 42,
+    isSmall ? 52 : 40,
     window.innerWidth / window.innerHeight,
     0.1,
-    300
+    250
   );
 
   let renderer;
@@ -31,11 +31,11 @@
       powerPreference: "high-performance"
     });
   } catch (e) {
-    console.error("WebGL initialization error", e);
+    console.error("WebGL failed to initialize", e);
     return;
   }
 
-  const dpr = Math.min(window.devicePixelRatio || 1, isSmall ? 1.5 : 1.75);
+  const dpr = Math.min(window.devicePixelRatio || 1, isSmall ? 1.4 : 1.75);
   renderer.setPixelRatio(dpr);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
@@ -43,39 +43,39 @@
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
 
-  // Lights
-  const hemiLight = new THREE.HemisphereLight(0xfff8ee, 0xd0c2b2, 1.2);
+  // Lighting
+  const hemiLight = new THREE.HemisphereLight(0xfff9f0, 0xd2c4b4, 1.25);
   scene.add(hemiLight);
 
-  const sunLight = new THREE.DirectionalLight(0xfff0db, 2.2);
-  sunLight.position.set(15, 30, 20);
+  const sunLight = new THREE.DirectionalLight(0xfff3e0, 2.3);
+  sunLight.position.set(15, 32, 20);
   sunLight.castShadow = true;
   sunLight.shadow.mapSize.set(1024, 1024);
   sunLight.shadow.camera.near = 0.5;
-  sunLight.shadow.camera.far = 120;
-  const shadowRange = 25;
+  sunLight.shadow.camera.far = 130;
+  const shadowRange = 26;
   sunLight.shadow.camera.left = -shadowRange;
   sunLight.shadow.camera.right = shadowRange;
   sunLight.shadow.camera.top = shadowRange;
   sunLight.shadow.camera.bottom = -shadowRange;
-  sunLight.shadow.bias = -0.0005;
+  sunLight.shadow.bias = -0.0006;
   scene.add(sunLight);
 
-  // Group that tilts subtly with mouse pointer (like Tinkeroll)
   const worldGroup = new THREE.Group();
   scene.add(worldGroup);
 
   // --------------------------------------------------------------------------
-  // 3D CATMULL-ROM CURVED TRACK
+  // 3D CATMULL-ROM CURVED TRACK (LONG & DYNAMIC ROLLERCOASTER CURVE)
   // --------------------------------------------------------------------------
   const pathPoints = [
-    new THREE.Vector3(0, 0, 10),
-    new THREE.Vector3(0, -0.5, 0),
-    new THREE.Vector3(6, -2.5, -18),
-    new THREE.Vector3(-5, -5.0, -36),
-    new THREE.Vector3(7, -8.0, -56),
-    new THREE.Vector3(-4, -11.0, -76),
-    new THREE.Vector3(0, -13.0, -96)
+    new THREE.Vector3(0, 0, 10),      // 0.00: Start / Card spawn
+    new THREE.Vector3(0, -0.6, -4),   // 0.08: Heading onto main track
+    new THREE.Vector3(5.5, -2.4, -22),// 0.22: Station 1 - Greeting Arch
+    new THREE.Vector3(-4.5, -4.8, -42),// 0.40: Station 2 - 3D Calendar Pavilion
+    new THREE.Vector3(6.5, -7.5, -64),// 0.60: Station 3 - Restaurant & Dining Table
+    new THREE.Vector3(-5.0, -10.2, -86),// 0.80: Station 4 - Program & Timeline
+    new THREE.Vector3(0, -12.4, -108), // 0.94: Station 5 - Final Heart & RSVP Post
+    new THREE.Vector3(0, -13.0, -118)  // 1.00: Finish
   ];
 
   const trackCurve = new THREE.CatmullRomCurve3(pathPoints, false, "catmullrom", 0.35);
@@ -83,15 +83,16 @@
   const UP = new THREE.Vector3(0, 1, 0);
 
   function getFrameAt(t) {
-    const pos = trackCurve.getPointAt(t);
-    const tan = trackCurve.getTangentAt(t).normalize();
+    const clampedT = Math.max(0, Math.min(1, t));
+    const pos = trackCurve.getPointAt(clampedT);
+    const tan = trackCurve.getTangentAt(clampedT).normalize();
     const side = new THREE.Vector3().crossVectors(tan, UP).normalize();
     return { pos, tan, side };
   }
 
-  // Materials in Wedding / Jubilee Palette
+  // Track Materials (Ivory Plank, Golden Rails, Cream Pillars)
   const matCreamTrack = new THREE.MeshStandardMaterial({
-    color: 0xede4d5,
+    color: 0xeee6d8,
     roughness: 0.45,
     metalness: 0.1
   });
@@ -101,14 +102,14 @@
     metalness: 0.65
   });
   const matPillars = new THREE.MeshStandardMaterial({
-    color: 0xd9cebe,
+    color: 0xdcd1c2,
     roughness: 0.6
   });
 
-  // Build Track Rails & Tiles
-  const tileCount = Math.floor(trackLen / 1.1);
-  const tileGeo = new THREE.BoxGeometry(2.2, 0.2, 0.9);
-  const railGeo = new THREE.CylinderGeometry(0.08, 0.08, 1.0, 8);
+  // Track Tiles & Side Rails Construction
+  const tileCount = Math.floor(trackLen / 1.15);
+  const tileGeo = new THREE.BoxGeometry(2.4, 0.22, 0.95);
+  const railGeo = new THREE.CylinderGeometry(0.08, 0.08, 1.05, 8);
   railGeo.rotateX(Math.PI / 2);
 
   const trackGroup = new THREE.Group();
@@ -127,18 +128,18 @@
     trackGroup.add(plank);
 
     // Side Golden Railings
-    [-1.15, 1.15].forEach((offset) => {
+    [-1.25, 1.25].forEach((offset) => {
       const rail = new THREE.Mesh(railGeo, matGoldRails);
-      rail.position.copy(pos).addScaledVector(side, offset).addScaledVector(UP, 0.22);
+      rail.position.copy(pos).addScaledVector(side, offset).addScaledVector(UP, 0.24);
       rail.quaternion.copy(plank.quaternion);
       rail.castShadow = true;
       trackGroup.add(rail);
     });
 
-    // Support pillars every 4th plank
-    if (i % 4 === 0) {
-      const pillarH = Math.max(2, -pos.y + 4);
-      const pillarGeo = new THREE.CylinderGeometry(0.18, 0.22, pillarH, 12);
+    // Support pillars
+    if (i % 3 === 0) {
+      const pillarH = Math.max(3, -pos.y + 6);
+      const pillarGeo = new THREE.CylinderGeometry(0.18, 0.24, pillarH, 12);
       const pillar = new THREE.Mesh(pillarGeo, matPillars);
       pillar.position.copy(pos).addScaledVector(UP, -pillarH / 2);
       pillar.castShadow = true;
@@ -154,18 +155,18 @@
   const ballGroup = new THREE.Group();
   worldGroup.add(ballGroup);
 
-  // Outer glossy clear shell
+  // Outer glossy glass sphere
   const outerBall = new THREE.Mesh(
     new THREE.SphereGeometry(BALL_RADIUS, 32, 24),
     new THREE.MeshPhysicalMaterial({
-      color: 0xfffcf7,
-      roughness: 0.06,
-      metalness: 0.15,
-      transmission: 0.85,
+      color: 0xffffff,
+      roughness: 0.05,
+      metalness: 0.1,
+      transmission: 0.88,
       thickness: 0.5,
       ior: 1.48,
       clearcoat: 1.0,
-      clearcoatRoughness: 0.05
+      clearcoatRoughness: 0.04
     })
   );
   outerBall.castShadow = true;
@@ -193,15 +194,377 @@
   innerSpinGroup.add(innerCore, goldenBand);
   ballGroup.add(innerSpinGroup);
 
-  // Gentle light attached to ball
-  const ballGlow = new THREE.PointLight(0xffe2bd, 1.5, 6);
-  ballGlow.position.set(0, 0.5, 0);
+  const ballGlow = new THREE.PointLight(0xffe2bd, 1.8, 7);
+  ballGlow.position.set(0, 0.4, 0);
   ballGroup.add(ballGlow);
 
   // --------------------------------------------------------------------------
-  // FLOATING PARTICLES & GOLDEN ORBS IN THE AIR
+  // HELPER: CREATE HIGH-RES TEXTURED 3D SIGNBOARDS MOUNTED DIRECTLY BY THE ROAD
   // --------------------------------------------------------------------------
-  const orbCount = 50;
+  function createRoadsideBillboard(width, height, drawCallback) {
+    const canvas = document.createElement("canvas");
+    canvas.width = 1024;
+    canvas.height = Math.round(1024 * (height / width));
+    const ctx = canvas.getContext("2d");
+
+    // Rounded rectangle background card
+    const r = 36;
+    ctx.fillStyle = "#ffffff";
+    ctx.shadowColor = "rgba(138, 126, 112, 0.25)";
+    ctx.shadowBlur = 28;
+    ctx.shadowOffsetY = 14;
+
+    ctx.beginPath();
+    ctx.roundRect(24, 24, canvas.width - 48, canvas.height - 48, r);
+    ctx.fill();
+
+    // Inner gold border
+    ctx.shadowColor = "transparent";
+    ctx.strokeStyle = "rgba(200, 168, 124, 0.4)";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    // Execute custom drawing logic
+    drawCallback(ctx, canvas.width, canvas.height);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.minFilter = THREE.LinearFilter;
+    texture.generateMipmaps = false;
+
+    const boardGeo = new THREE.PlaneGeometry(width, height);
+    const boardMat = new THREE.MeshBasicMaterial({
+      map: texture,
+      transparent: true,
+      side: THREE.DoubleSide
+    });
+
+    const boardMesh = new THREE.Mesh(boardGeo, boardMat);
+
+    // Physical board frame and stand
+    const frameGroup = new THREE.Group();
+    boardMesh.position.z = 0.06;
+    frameGroup.add(boardMesh);
+
+    // Back backing
+    const backGeo = new THREE.BoxGeometry(width + 0.1, height + 0.1, 0.1);
+    const backMesh = new THREE.Mesh(backGeo, matCreamTrack);
+    backMesh.castShadow = true;
+    backMesh.receiveShadow = true;
+    frameGroup.add(backMesh);
+
+    // Support legs
+    const legGeo = new THREE.CylinderGeometry(0.08, 0.1, 3.5, 12);
+    [-width * 0.35, width * 0.35].forEach((x) => {
+      const leg = new THREE.Mesh(legGeo, matGoldRails);
+      leg.position.set(x, -height / 2 - 1.2, 0);
+      leg.castShadow = true;
+      frameGroup.add(leg);
+    });
+
+    return frameGroup;
+  }
+
+  // --------------------------------------------------------------------------
+  // STATION 1: GREETING & WELCOME SIGNBOARD (t ≈ 0.20)
+  // --------------------------------------------------------------------------
+  (function buildStation1() {
+    const { pos, tan, side } = getFrameAt(0.20);
+    const board = createRoadsideBillboard(4.2, 3.0, (ctx, w, h) => {
+      ctx.textAlign = "center";
+      
+      // Badge
+      ctx.fillStyle = "#9e7d52";
+      ctx.font = "italic 32px 'Cormorant Garamond', serif";
+      ctx.fillText("✨  ПОЧАТОК СВЯТА  ✨", w / 2, 90);
+
+      // Main Title
+      ctx.fillStyle = "#2a2521";
+      ctx.font = "bold 64px 'Great Vibes', cursive";
+      ctx.fillText("Запрошую Вас на святкування!", w / 2, 180);
+
+      // Golden Line
+      ctx.strokeStyle = "#c8a87c";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 120, 215);
+      ctx.lineTo(w / 2 + 120, 215);
+      ctx.stroke();
+
+      // Quote
+      ctx.fillStyle = "#8a7e70";
+      ctx.font = "italic 36px 'Cormorant Garamond', Georgia, serif";
+      ctx.fillText("«Є особливі моменти, які хочеться розділити", w / 2, 290);
+      ctx.fillText("з найдорожчими людьми!»", w / 2, 340);
+
+      // Text
+      ctx.fillStyle = "#554d45";
+      ctx.font = "italic 32px 'Cormorant Garamond', Georgia, serif";
+      ctx.fillText("Буду щиро рада бачити Вас серед гостей", w / 2, 420);
+      ctx.fillText("на святкуванні мого ювілею 🥂", w / 2, 470);
+    });
+
+    // Mount right by the roadside facing incoming ball
+    board.position.copy(pos).addScaledVector(side, 3.6).addScaledVector(UP, 2.2);
+    board.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tan.clone().negate().addScaledVector(side, -0.4).normalize());
+    worldGroup.add(board);
+  })();
+
+  // --------------------------------------------------------------------------
+  // STATION 2: 3D CALENDAR & DATE PAVILION (t ≈ 0.40)
+  // --------------------------------------------------------------------------
+  (function buildStation2() {
+    const { pos, tan, side } = getFrameAt(0.40);
+    const g = new THREE.Group();
+
+    // Signboard for Calendar
+    const board = createRoadsideBillboard(4.4, 3.2, (ctx, w, h) => {
+      ctx.textAlign = "center";
+
+      ctx.fillStyle = "#9e7d52";
+      ctx.font = "italic 30px 'Cormorant Garamond', serif";
+      ctx.fillText("📅  ЗБЕРЕЖІТЬ ЦЮ ДАТУ", w / 2, 80);
+
+      ctx.fillStyle = "#2a2521";
+      ctx.font = "62px 'Great Vibes', cursive";
+      ctx.fillText("17 листопада 2026", w / 2, 160);
+
+      ctx.fillStyle = "#8a7e70";
+      ctx.font = "italic 32px 'Cormorant Garamond', serif";
+      ctx.fillText("Початок святкування о 16:00", w / 2, 215);
+
+      // Mini Calendar grid representation
+      ctx.fillStyle = "#faf7f2";
+      ctx.fillRect(80, 250, w - 160, 240);
+      ctx.strokeStyle = "rgba(200, 168, 124, 0.4)";
+      ctx.strokeRect(80, 250, w - 160, 240);
+
+      ctx.fillStyle = "#9e7d52";
+      ctx.font = "bold 26px 'Cormorant Garamond', serif";
+      ctx.fillText("ЛИСТОПАД 2026", w / 2, 290);
+
+      // Highlighted 17th with heart badge
+      ctx.fillStyle = "#c8a87c";
+      ctx.beginPath();
+      ctx.arc(w / 2, 380, 48, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#ffffff";
+      ctx.font = "bold 44px 'Playfair Display', serif";
+      ctx.fillText("17", w / 2, 396);
+
+      ctx.fillStyle = "#554d45";
+      ctx.font = "italic 28px 'Cormorant Garamond', serif";
+      ctx.fillText("Вівторок  •  Головний святковий день", w / 2, 460);
+    });
+
+    board.position.copy(pos).addScaledVector(side, -3.8).addScaledVector(UP, 2.2);
+    board.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tan.clone().negate().addScaledVector(side, 0.4).normalize());
+    g.add(board);
+
+    // Physical Rotunda Pavilion beside board
+    const rotunda = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.8, 2.0, 0.3, 32),
+      matCreamTrack
+    );
+    rotunda.position.copy(pos).addScaledVector(side, -6.5).addScaledVector(UP, 0.2);
+    rotunda.castShadow = true;
+    rotunda.receiveShadow = true;
+    g.add(rotunda);
+
+    // Columns & golden ring
+    for (let a = 0; a < Math.PI * 2; a += Math.PI / 2) {
+      const col = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.12, 2.2, 16), matPillars);
+      col.position.set(rotunda.position.x + Math.cos(a) * 1.4, rotunda.position.y + 1.1, rotunda.position.z + Math.sin(a) * 1.4);
+      col.castShadow = true;
+      g.add(col);
+    }
+
+    worldGroup.add(g);
+  })();
+
+  // --------------------------------------------------------------------------
+  // STATION 3: RESTAURANT & MENU STOP (t ≈ 0.60)
+  // --------------------------------------------------------------------------
+  (function buildStation3() {
+    const { pos, tan, side } = getFrameAt(0.60);
+    const g = new THREE.Group();
+
+    // Menu & Location Board
+    const board = createRoadsideBillboard(4.5, 3.3, (ctx, w, h) => {
+      ctx.textAlign = "center";
+
+      ctx.fillStyle = "#9e7d52";
+      ctx.font = "italic 30px 'Cormorant Garamond', serif";
+      ctx.fillText("📍  ЛОКАЦІЯ СВЯТА", w / 2, 80);
+
+      ctx.fillStyle = "#2a2521";
+      ctx.font = "bold 58px 'Great Vibes', cursive";
+      ctx.fillText("Ресторан «Австрійський двір»", w / 2, 165);
+
+      ctx.fillStyle = "#8a7e70";
+      ctx.font = "italic 32px 'Cormorant Garamond', serif";
+      ctx.fillText("селище Куликів, вул. Шевченка, 69а", w / 2, 220);
+
+      // Decorative divider
+      ctx.strokeStyle = "#c8a87c";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 140, 250);
+      ctx.lineTo(w / 2 + 140, 250);
+      ctx.stroke();
+
+      // Menu Highlights
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#2a2521";
+      ctx.font = "bold 28px 'Cormorant Garamond', serif";
+      ctx.fillText("СВЯТКОВИЙ СТІЛ:", 100, 305);
+
+      ctx.font = "italic 28px 'Cormorant Garamond', serif";
+      ctx.fillStyle = "#554d45";
+      ctx.fillText("🥂  Welcome Drink & Вишукані закуски", 100, 350);
+      ctx.fillText("🍖  Фірмові гарячі страви та австрійські делікатеси", 100, 395);
+      ctx.fillText("🎂  Ювілейний торт та крафтові десерти", 100, 440);
+    });
+
+    board.position.copy(pos).addScaledVector(side, 3.8).addScaledVector(UP, 2.2);
+    board.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tan.clone().negate().addScaledVector(side, -0.4).normalize());
+    g.add(board);
+
+    // 3D Physical Dining Table beside road
+    const tableGroup = new THREE.Group();
+    tableGroup.position.copy(pos).addScaledVector(side, 6.4).addScaledVector(UP, 0.2);
+
+    const tableTop = new THREE.Mesh(
+      new THREE.CylinderGeometry(1.6, 1.6, 0.12, 32),
+      new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 })
+    );
+    tableTop.position.y = 1.0;
+    tableTop.castShadow = true;
+    tableGroup.add(tableTop);
+
+    const tableLeg = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.28, 1.0, 16), matGoldRails);
+    tableLeg.position.y = 0.5;
+    tableGroup.add(tableLeg);
+
+    // Crystal glasses
+    [-0.35, 0.35].forEach((gx) => {
+      const glass = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.08, 0.02, 0.35, 12),
+        new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.9, roughness: 0.1, thickness: 0.2 })
+      );
+      glass.position.set(gx, 1.25, 0);
+      tableGroup.add(glass);
+    });
+
+    g.add(tableGroup);
+    worldGroup.add(g);
+  })();
+
+  // --------------------------------------------------------------------------
+  // STATION 4: PROGRAM OF THE DAY (t ≈ 0.80)
+  // --------------------------------------------------------------------------
+  (function buildStation4() {
+    const { pos, tan, side } = getFrameAt(0.80);
+
+    const board = createRoadsideBillboard(4.6, 3.4, (ctx, w, h) => {
+      ctx.textAlign = "center";
+
+      ctx.fillStyle = "#9e7d52";
+      ctx.font = "italic 30px 'Cormorant Garamond', serif";
+      ctx.fillText("🕒  ПРОГРАМА СВЯТКУВАННЯ", w / 2, 80);
+
+      ctx.fillStyle = "#2a2521";
+      ctx.font = "bold 60px 'Great Vibes', cursive";
+      ctx.fillText("Розклад Дня", w / 2, 160);
+
+      ctx.strokeStyle = "#c8a87c";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 120, 195);
+      ctx.lineTo(w / 2 + 120, 195);
+      ctx.stroke();
+
+      // Timeline Schedule
+      ctx.textAlign = "left";
+      const schedule = [
+        { time: "16:00", desc: "Зустріч гостей, welcome drink та обійми" },
+        { time: "16:30", desc: "Святковий банкет, щирі вітання та тости" },
+        { time: "18:00", desc: "Жива музика, танці, фотосесія та розваги" },
+        { time: "21:00", desc: "Ювілейний торт і тепле душевне спілкування" }
+      ];
+
+      schedule.forEach((item, idx) => {
+        const y = 260 + idx * 56;
+        ctx.fillStyle = "#9e7d52";
+        ctx.font = "bold 32px 'Playfair Display', serif";
+        ctx.fillText(item.time, 100, y);
+
+        ctx.fillStyle = "#554d45";
+        ctx.font = "italic 30px 'Cormorant Garamond', serif";
+        ctx.fillText(item.desc, 230, y);
+      });
+    });
+
+    board.position.copy(pos).addScaledVector(side, -3.8).addScaledVector(UP, 2.2);
+    board.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tan.clone().negate().addScaledVector(side, 0.4).normalize());
+    worldGroup.add(board);
+  })();
+
+  // --------------------------------------------------------------------------
+  // STATION 5: FINAL ARCH & RSVP SIGNPOST (t ≈ 0.94)
+  // --------------------------------------------------------------------------
+  (function buildStation5() {
+    const { pos, tan, side } = getFrameAt(0.94);
+    const g = new THREE.Group();
+
+    // Golden Arrival Arch spanning right over the track
+    const arch = new THREE.Mesh(
+      new THREE.TorusGeometry(2.2, 0.12, 16, 40, Math.PI),
+      matGoldRails
+    );
+    arch.position.copy(pos).addScaledVector(UP, 0.3);
+    arch.quaternion.setFromUnitVectors(new THREE.Vector3(1, 0, 0), side);
+    arch.castShadow = true;
+    g.add(arch);
+
+    // RSVP Card Billboard right next to track
+    const board = createRoadsideBillboard(4.6, 3.4, (ctx, w, h) => {
+      ctx.textAlign = "center";
+
+      ctx.fillStyle = "#9e7d52";
+      ctx.font = "italic 32px 'Cormorant Garamond', serif";
+      ctx.fillText("💌  ЧЕКАЄМО НА ВАС!", w / 2, 90);
+
+      ctx.fillStyle = "#2a2521";
+      ctx.font = "bold 64px 'Great Vibes', cursive";
+      ctx.fillText("З нетерпінням чекаю зустрічі!", w / 2, 180);
+
+      ctx.fillStyle = "#554d45";
+      ctx.font = "italic 34px 'Cormorant Garamond', serif";
+      ctx.fillText("Приходьте розділити зі мною радість цього", w / 2, 270);
+      ctx.fillText("особливого дня, гарний настрій та незабутні миті!", w / 2, 320);
+
+      // Heart icon
+      ctx.fillStyle = "#c8a87c";
+      ctx.font = "46px sans-serif";
+      ctx.fillText("❤️", w / 2, 400);
+
+      ctx.fillStyle = "#9e7d52";
+      ctx.font = "bold 28px 'Montserrat', sans-serif";
+      ctx.fillText("17 ЛИСТОПАДА 2026", w / 2, 460);
+    });
+
+    board.position.copy(pos).addScaledVector(side, 3.6).addScaledVector(UP, 2.2);
+    board.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), tan.clone().negate().addScaledVector(side, -0.4).normalize());
+    g.add(board);
+
+    worldGroup.add(g);
+  })();
+
+  // --------------------------------------------------------------------------
+  // FLOATING PARTICLES & GOLDEN GLOW IN THE AIR
+  // --------------------------------------------------------------------------
+  const orbCount = 45;
   const orbGeo = new THREE.SphereGeometry(0.12, 16, 12);
   const orbMat = new THREE.MeshStandardMaterial({
     color: 0xd9b88c,
@@ -225,128 +588,7 @@
   }
 
   // --------------------------------------------------------------------------
-  // THEMED 3D STATIONS ALONG THE TRACK
-  // --------------------------------------------------------------------------
-  // Station 1: Calendar 3D Pavilion (t ≈ 0.25)
-  (function buildCalendarStation() {
-    const { pos, side } = getFrameAt(0.25);
-    const g = new THREE.Group();
-    g.position.copy(pos).addScaledVector(side, 3.8).addScaledVector(UP, 0.4);
-
-    // Base podium
-    const base = new THREE.Mesh(
-      new THREE.CylinderGeometry(2.4, 2.6, 0.3, 32),
-      new THREE.MeshStandardMaterial({ color: 0xeee7db, roughness: 0.4 })
-    );
-    base.castShadow = true;
-    base.receiveShadow = true;
-    g.add(base);
-
-    // Marble pillars
-    for (let a = 0; a < Math.PI * 2; a += Math.PI / 2) {
-      const pillar = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.12, 0.14, 2.2, 16),
-        matPillars
-      );
-      pillar.position.set(Math.cos(a) * 1.8, 1.1, Math.sin(a) * 1.8);
-      pillar.castShadow = true;
-      g.add(pillar);
-    }
-
-    // Top Ring
-    const topRing = new THREE.Mesh(
-      new THREE.TorusGeometry(1.8, 0.1, 12, 32),
-      matGoldRails
-    );
-    topRing.rotation.x = Math.PI / 2;
-    topRing.position.y = 2.2;
-    g.add(topRing);
-
-    // Center Golden Heart
-    const heartShape = new THREE.Shape();
-    heartShape.moveTo(0, 0);
-    heartShape.bezierCurveTo(0, 0.3, -0.6, 0.6, -0.6, 0.9);
-    heartShape.bezierCurveTo(-0.6, 1.2, 0, 1.5, 0, 1.1);
-    heartShape.bezierCurveTo(0, 1.5, 0.6, 1.2, 0.6, 0.9);
-    heartShape.bezierCurveTo(0.6, 0.6, 0, 0.3, 0, 0);
-
-    const extrudeSettings = { depth: 0.15, bevelEnabled: true, bevelSegments: 3, steps: 1, bevelSize: 0.05, bevelThickness: 0.05 };
-    const heartGeo = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
-    const heartMesh = new THREE.Mesh(
-      heartGeo,
-      new THREE.MeshStandardMaterial({ color: 0xc8a87c, roughness: 0.2, metalness: 0.7 })
-    );
-    heartMesh.scale.set(0.6, 0.6, 0.6);
-    heartMesh.position.set(0, 1.1, 0);
-    g.add(heartMesh);
-
-    worldGroup.add(g);
-  })();
-
-  // Station 2: Restaurant & Table 3D Pavilion (t ≈ 0.50)
-  (function buildRestaurantStation() {
-    const { pos, side } = getFrameAt(0.50);
-    const g = new THREE.Group();
-    g.position.copy(pos).addScaledVector(side, -4.2).addScaledVector(UP, 0.4);
-
-    // Round Dining Table
-    const tableTop = new THREE.Mesh(
-      new THREE.CylinderGeometry(1.8, 1.8, 0.12, 32),
-      new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 })
-    );
-    tableTop.position.y = 1.0;
-    tableTop.castShadow = true;
-    tableTop.receiveShadow = true;
-    g.add(tableTop);
-
-    const tableLeg = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.18, 0.28, 1.0, 16),
-      matGoldRails
-    );
-    tableLeg.position.y = 0.5;
-    g.add(tableLeg);
-
-    // Champagne Glasses on table
-    [-0.4, 0.4].forEach((x) => {
-      const glass = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.08, 0.02, 0.35, 12),
-        new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.9, roughness: 0.1, thickness: 0.2 })
-      );
-      glass.position.set(x, 1.2, 0);
-      g.add(glass);
-    });
-
-    worldGroup.add(g);
-  })();
-
-  // Station 3: Music & Stage Pavilion (t ≈ 0.75)
-  (function buildMusicStation() {
-    const { pos, side } = getFrameAt(0.75);
-    const g = new THREE.Group();
-    g.position.copy(pos).addScaledVector(side, 4.0).addScaledVector(UP, 0.4);
-
-    const stage = new THREE.Mesh(
-      new THREE.BoxGeometry(3.5, 0.3, 3.5),
-      new THREE.MeshStandardMaterial({ color: 0xe8dfd1, roughness: 0.5 })
-    );
-    stage.castShadow = true;
-    stage.receiveShadow = true;
-    g.add(stage);
-
-    // Archway
-    const arch = new THREE.Mesh(
-      new THREE.TorusGeometry(1.6, 0.1, 12, 32, Math.PI),
-      matGoldRails
-    );
-    arch.position.set(0, 1.6, 0);
-    arch.castShadow = true;
-    g.add(arch);
-
-    worldGroup.add(g);
-  })();
-
-  // --------------------------------------------------------------------------
-  // SCROLL PROGRESS INTERPOLATION
+  // CONTINUOUS SCROLL-LINKED ROLLERCOASTER PHYSICS & CAMERA
   // --------------------------------------------------------------------------
   let targetProgress = 0;
   let currentProgress = 0;
@@ -358,7 +600,6 @@
     pointer.y = (e.clientY / window.innerHeight) * 2 - 1;
   }, { passive: true });
 
-  // Update scroll progress from window scroll
   function updateScroll() {
     const scrollH = document.documentElement.scrollHeight - window.innerHeight;
     if (scrollH > 0) {
@@ -368,7 +609,7 @@
   window.addEventListener("scroll", updateScroll, { passive: true });
   updateScroll();
 
-  // Update track rail UI
+  // Progress rail updates
   const trackFill = document.querySelector(".track-fill");
   const trackBallUI = document.querySelector(".track-ball");
   const stationItems = document.querySelectorAll(".track-station-item");
@@ -377,22 +618,28 @@
     if (trackFill) trackFill.style.height = `${p * 100}%`;
     if (trackBallUI) trackBallUI.style.top = `${p * 100}%`;
 
-    const activeIndex = p < 0.15 ? 0 : p < 0.38 ? 1 : p < 0.62 ? 2 : p < 0.85 ? 3 : 4;
+    const activeIndex = p < 0.12 ? 0 : p < 0.32 ? 1 : p < 0.52 ? 2 : p < 0.72 ? 3 : p < 0.90 ? 4 : 5;
     stationItems.forEach((el, idx) => {
       el.classList.toggle("active", idx === activeIndex);
     });
   }
 
-  // Camera positions
+  // Camera state tracking
   const currentCamPos = new THREE.Vector3();
   const currentCamLook = new THREE.Vector3();
   let isFirstFrame = true;
 
-  // Clock
   const clock = new THREE.Clock();
 
+  // Initial envelope state
+  let isEnvelopeOpened = false;
+
+  window.notifyEnvelopeOpened = function () {
+    isEnvelopeOpened = true;
+  };
+
   // --------------------------------------------------------------------------
-  // RENDER LOOP
+  // MAIN RENDER LOOP
   // --------------------------------------------------------------------------
   function renderLoop() {
     requestAnimationFrame(renderLoop);
@@ -400,41 +647,50 @@
     const delta = Math.min(clock.getDelta(), 0.1);
     const elapsed = clock.getElapsedTime();
 
-    // Lerp progress for ultra-smooth physical motion
+    // Smooth physics lerp
     currentProgress += (targetProgress - currentProgress) * 0.08;
     updateTrackRailUI(currentProgress);
 
     // Frame on path
     const { pos, tan, side } = getFrameAt(currentProgress);
 
-    // Position the 3D ball on the track
-    const ballPos = pos.clone().addScaledVector(UP, BALL_RADIUS + 0.1);
+    // Position Ball directly on road
+    const ballPos = pos.clone().addScaledVector(UP, BALL_RADIUS + 0.11);
     ballGroup.position.copy(ballPos);
 
-    // Spin the ball proportional to forward movement
-    innerSpinGroup.rotation.x += delta * 4 * (1 + targetProgress * 2);
-    innerSpinGroup.rotation.z += delta * 2;
+    // Real rolling spin rotation proportional to progress delta
+    const rollSpeed = (targetProgress - currentProgress) * 45;
+    innerSpinGroup.rotation.x += (rollSpeed + 0.5) * delta * 5;
+    innerSpinGroup.rotation.z += delta * 1.5;
 
-    // Follow Camera (like Tinkeroll)
-    const introBlend = Math.max(0, 1 - currentProgress * 8); // Wider camera at the beginning
-    const camBack = (isSmall ? 6.5 : 5.8) + introBlend * 3;
-    const camUp = (isSmall ? 4.2 : 3.4) + introBlend * 2;
-    const sideSwing = Math.sin(currentProgress * 7) * 1.5;
-
-    const targetCamPos = ballPos.clone()
-      .addScaledVector(tan, -camBack)
-      .addScaledVector(UP, camUp)
-      .addScaledVector(side, sideSwing);
-
-    const targetLookAt = ballPos.clone()
-      .addScaledVector(tan, 3.0)
-      .addScaledVector(UP, 0.2);
-
-    if (isFirstFrame) {
-      currentCamPos.copy(targetCamPos);
-      currentCamLook.copy(targetLookAt);
-      isFirstFrame = false;
+    // Camera follow mechanics (Tinkeroll ride style)
+    if (!isEnvelopeOpened) {
+      // Prior to opening: wide overview facing card spawn
+      const introCamPos = new THREE.Vector3(0, 3.5, 12);
+      const introCamLook = new THREE.Vector3(0, 0, 5);
+      if (isFirstFrame) {
+        currentCamPos.copy(introCamPos);
+        currentCamLook.copy(introCamLook);
+        isFirstFrame = false;
+      } else {
+        currentCamPos.lerp(introCamPos, 0.08);
+        currentCamLook.lerp(introCamLook, 0.08);
+      }
     } else {
+      // Active Ride: Dynamic Follow Camera right behind the marble
+      const camBack = isSmall ? 5.2 : 4.4;
+      const camUp = isSmall ? 3.2 : 2.5;
+      const sideSwing = Math.sin(currentProgress * 6) * 0.8;
+
+      const targetCamPos = ballPos.clone()
+        .addScaledVector(tan, -camBack)
+        .addScaledVector(UP, camUp)
+        .addScaledVector(side, sideSwing);
+
+      const targetLookAt = ballPos.clone()
+        .addScaledVector(tan, 4.5)
+        .addScaledVector(UP, 0.2);
+
       currentCamPos.lerp(targetCamPos, 0.08);
       currentCamLook.lerp(targetLookAt, 0.1);
     }
@@ -442,17 +698,17 @@
     camera.position.copy(currentCamPos);
     camera.lookAt(currentCamLook);
 
-    // Sun follows the ball
-    sunLight.position.copy(ballPos).add(new THREE.Vector3(12, 25, 15));
+    // Sun follows the marble
+    sunLight.position.copy(ballPos).add(new THREE.Vector3(12, 28, 16));
     sunLight.target.position.copy(ballPos);
 
-    // Mouse tilt on world
-    worldGroup.rotation.z += (-pointer.x * 0.025 - worldGroup.rotation.z) * 0.05;
-    worldGroup.rotation.x += (pointer.y * 0.02 - worldGroup.rotation.x) * 0.05;
+    // Subtle responsive tilt
+    worldGroup.rotation.z += (-pointer.x * 0.02 - worldGroup.rotation.z) * 0.05;
+    worldGroup.rotation.x += (pointer.y * 0.015 - worldGroup.rotation.x) * 0.05;
 
     // Float orbs
     orbs.forEach((item, idx) => {
-      item.mesh.position.y = item.basePos.y + Math.sin(elapsed * item.speed + idx) * 0.35;
+      item.mesh.position.y = item.basePos.y + Math.sin(elapsed * item.speed + idx) * 0.25;
     });
 
     renderer.render(scene, camera);
@@ -465,12 +721,12 @@
     const w = window.innerWidth;
     const h = window.innerHeight;
     camera.aspect = w / h;
-    camera.fov = w < 768 ? 55 : 42;
+    camera.fov = w < 768 ? 52 : 40;
     camera.updateProjectionMatrix();
     renderer.setSize(w, h);
   });
 
-  // Expose station click jump
+  // Jump to Station
   window.jumpToStation = function (percent) {
     const scrollH = document.documentElement.scrollHeight - window.innerHeight;
     window.scrollTo({
