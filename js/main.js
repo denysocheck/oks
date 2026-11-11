@@ -129,9 +129,19 @@
   }, { passive: true });
 
   // --------------------------------------------------------------------------
-  // STATION CARD REVEAL ON SCROLL (IntersectionObserver)
+  // STATION CARD REVEAL ON SCROLL
   // --------------------------------------------------------------------------
   const stationCards = document.querySelectorAll(".station-copy-card");
+
+  function revealVisibleCards() {
+    const triggerH = window.innerHeight * 0.88;
+    stationCards.forEach((card) => {
+      const rect = card.getBoundingClientRect();
+      if (rect.top < triggerH && rect.bottom > 40) {
+        card.classList.add("visible");
+      }
+    });
+  }
 
   if ("IntersectionObserver" in window) {
     const cardObserver = new IntersectionObserver(
@@ -142,13 +152,14 @@
           }
         });
       },
-      { threshold: 0.15, rootMargin: "0px 0px -60px 0px" }
+      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
     );
 
     stationCards.forEach((card) => cardObserver.observe(card));
-  } else {
-    // Fallback: just show all
-    stationCards.forEach((card) => card.classList.add("visible"));
   }
+
+  window.addEventListener("scroll", revealVisibleCards, { passive: true });
+  window.addEventListener("resize", revealVisibleCards, { passive: true });
+  revealVisibleCards();
 
 })();

@@ -129,19 +129,18 @@ body {
   border-radius: 18px;
   box-shadow: 0 25px 60px rgba(120, 100, 80, 0.25), 0 5px 15px rgba(0, 0, 0, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.85);
-  overflow: hidden; /* critical: hides card peeking through */
 }
 
 /* Card inside the envelope */
 .envelope-card {
   position: absolute;
-  top: 8%;
+  top: 10%;
   left: 6%;
   width: 88%;
   height: 84%;
   background: #ffffff;
   border-radius: 12px;
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
   border: 1px solid var(--color-card-border);
   display: flex;
@@ -150,7 +149,7 @@ body {
   justify-content: center;
   text-align: center;
   padding: 24px;
-  transform: translateY(0);
+  transform: translateZ(1px) translateY(34px);
   transition: transform 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s;
 }
 
@@ -189,12 +188,13 @@ body {
 .envelope-pocket-front {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 4;
   pointer-events: none;
   background: linear-gradient(160deg, #ede4d6, #ded0be);
-  clip-path: polygon(0% 0%, 50% 50%, 100% 0%, 100% 100%, 0% 100%);
+  clip-path: polygon(0% 32%, 50% 50%, 100% 32%, 100% 100%, 0% 100%);
   border-radius: 18px;
   box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.6);
+  transform: translateZ(3px);
 }
 
 /* Envelope Top Flap */
@@ -203,12 +203,13 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 54%;
+  height: 56%;
   background: linear-gradient(180deg, #e4d7c6, #d7c7b3);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
   transform-origin: top center;
   transform-style: preserve-3d;
-  z-index: 4;
+  z-index: 5;
+  transform: translateZ(4px);
   transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
@@ -218,11 +219,11 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) translateZ(6px);
   width: 76px;
   height: 76px;
   border-radius: 50%;
-  z-index: 5;
+  z-index: 6;
   background: transparent;
   display: flex;
   align-items: center;
@@ -241,12 +242,11 @@ body {
 
 /* Open Animation Sequence */
 .envelope-box.anim-open {
-  overflow: visible; /* allows card to slide out */
   animation: envZoomDisappear 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) 0.9s forwards;
 }
 
 .envelope-box.anim-open .envelope-flap {
-  transform: rotateX(180deg);
+  transform: rotateX(180deg) translateZ(1px);
   z-index: 1;
 }
 
@@ -256,11 +256,11 @@ body {
 }
 
 .envelope-box.anim-open .envelope-card {
-  transform: translateY(-90px) scale(1.05);
+  transform: translateY(-90px) translateZ(8px) scale(1.05);
 }
 
 .envelope-box.anim-open .envelope-pocket-front {
-  opacity: 0;
+  opacity: 0.15;
   transition: opacity 0.4s ease 0.1s;
 }
 
@@ -302,7 +302,7 @@ body {
    ========================================================================== */
 .hud-nav {
   position: fixed;
-  top: 20px;
+  top: max(16px, env(safe-area-inset-top, 16px));
   left: 20px;
   right: 20px;
   z-index: 50;
@@ -467,17 +467,18 @@ body.world-active .track-rail {
 .station-copy-card {
   position: relative;
   width: min(500px, 100%);
-  padding: clamp(26px, 4.5vw, 38px);
-  border-radius: 26px;
-  background: rgba(253, 250, 246, 0.92);
+  padding: clamp(24px, 4.5vw, 36px);
+  border-radius: 24px;
+  background: #fdfaf6;
+  background: rgba(253, 250, 246, 0.94);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1.5px solid var(--color-card-border);
   box-shadow: 0 30px 70px rgba(70, 55, 40, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.95);
   pointer-events: auto;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, opacity 0.6s ease;
+  transition: transform 0.4s ease, box-shadow 0.35s ease, opacity 0.5s ease;
   opacity: 0;
-  transform: translateY(40px);
+  transform: translateY(30px);
 }
 
 .station-copy-card.visible {
@@ -715,14 +716,15 @@ body.world-active .track-rail {
 /* Floating Music Control */
 .music-toggle {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
+  bottom: max(20px, env(safe-area-inset-bottom, 20px));
+  right: max(20px, env(safe-area-inset-right, 20px));
   z-index: 60;
   width: 48px;
   height: 48px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1.5px solid var(--color-card-border);
   display: flex;
   align-items: center;
@@ -757,11 +759,11 @@ body.world-active .track-rail {
 @media (max-width: 768px) {
   .s-station {
     justify-content: center !important;
-    padding: 0 14px;
+    padding: calc(75px + env(safe-area-inset-top, 0px)) 14px 60px;
     min-height: 120vh;
   }
   .s-station:first-child {
-    padding-top: 20vh;
+    padding-top: calc(24vh + env(safe-area-inset-top, 0px));
   }
   .station-copy-card {
     padding: 22px 18px;
